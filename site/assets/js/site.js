@@ -8,6 +8,118 @@
   const hasG = typeof window.gsap !== 'undefined';
   if (hasG && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
 
+  /* ---------- GTM stack: three logo rows driven by scroll velocity, filters, tooltip ---------- */
+  (() => {
+    const root = $('[data-gs]'); if (!root) return;
+    const list = $('[data-gs-list]', root), tip = $('[data-gs-tip]', root), pauseBtn = $('[data-gs-pause]');
+    const tiles = $$('.tl', list);
+    let rows = [], paused = false, filter = 'all', active = null, inView = false, boost = 0, sdir = 1, last = performance.now();
+
+    if (!reduce) {
+      root.classList.add('is-live');
+      const wrap = document.createElement('div'); wrap.className = 'gs__rows';
+      [0, 1, 2].forEach(r => {
+        const ul = document.createElement('ul'); ul.className = 'gs__row'; ul.setAttribute('aria-label', 'Tools, row ' + (r + 1));
+        tiles.filter((_, i) => i % 3 === r).forEach(t => ul.appendChild(t));
+        wrap.appendChild(ul);
+        rows.push({ el: ul, x: 0, w: 0, dir: r % 2 ? 1 : -1, base: [.55, .42, .5][r], ts: 1, tsT: 1 });
+      });
+      root.insertBefore(wrap, list);
+      const fill = () => rows.forEach(R => {
+        $$('[data-clone]', R.el).forEach(c => R.el.removeChild(c));
+        const orig = [...R.el.children];
+        R.w = R.el.scrollWidth + 14;
+        const copies = Math.max(1, Math.ceil((innerWidth * 1.2) / R.w));
+        for (let k = 0; k < copies; k++) orig.forEach(t => { const c = t.cloneNode(true); c.dataset.clone = ''; c.setAttribute('aria-hidden', 'true'); c.tabIndex = -1; R.el.appendChild(c); });
+        R.x = R.dir > 0 ? -R.w : 0;
+      });
+      fill(); applyFilter();
+      let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { fill(); applyFilter(); }, 200); });
+      rows.forEach(R => {
+        R.el.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') R.tsT = .12; });
+        R.el.addEventListener('pointerleave', () => { R.tsT = 1; });
+      });
+      if (hasG && window.ScrollTrigger) ScrollTrigger.create({ trigger: '#stack', start: 'top bottom', end: 'bottom top', onUpdate: st => { const v = st.getVelocity(); boost = Math.min(9, Math.abs(v) / 260); sdir = v < 0 ? -1 : 1; } });
+      new IntersectionObserver(es => { const was = inView; inView = es[0].isIntersecting; if (inView && !was) { last = performance.now(); requestAnimationFrame(tick); } }).observe(root);
+    }
+
+    function tick(now) {
+      if (!inView) return;
+      const dt = Math.min(48, now - last) / 16.67; last = now;
+      boost *= .93;
+      rows.forEach(R => {
+        const tgt = paused ? 0 : R.tsT; R.ts += (tgt - R.ts) * .08; if (Math.abs(tgt - R.ts) < .004) R.ts = tgt;
+        R.x += R.dir * sdir * R.base * (1 + boost) * R.ts * dt;
+        if (R.x <= -R.w) R.x += R.w; else if (R.x > 0) R.x -= R.w;
+        R.el.style.transform = `translate3d(${R.x.toFixed(2)}px,0,0) skewX(${(-R.dir * sdir * boost * .5).toFixed(2)}deg)`;
+      });
+      if (active) place(active);
+      requestAnimationFrame(tick);
+    }
+
+    function place(t) {
+      const a = t.getBoundingClientRect(), b = root.getBoundingClientRect();
+      const half = tip.offsetWidth / 2, x = Math.max(half + 8, Math.min(b.width - half - 8, a.left - b.left + a.width / 2));
+      tip.style.left = x + 'px'; tip.style.top = (a.top - b.top - tip.offsetHeight - 14) + 'px';
+    }
+    function show(t) {
+      if (active && active !== t) active.classList.remove('is-act');
+      active = t; t.classList.add('is-act');
+      $('img', tip).src = $('img', t).src; $('b', tip).textContent = $('b', t).textContent;
+      $('small', tip).textContent = $('small', t).textContent; $('p', tip).textContent = t.dataset.use;
+      tip.hidden = false; place(t); requestAnimationFrame(() => tip.classList.add('is-on'));
+    }
+    function hide(t) {
+      if (t && t !== active) return;
+      if (active) active.classList.remove('is-act'); active = null; tip.classList.remove('is-on');
+    }
+    root.addEventListener('pointerover', e => { const t = e.target.closest('.tl'); if (t && e.pointerType === 'mouse') show(t); });
+    root.addEventListener('pointerout', e => { const t = e.target.closest('.tl'); if (t && e.pointerType === 'mouse' && !t.contains(e.relatedTarget)) hide(t); });
+    root.addEventListener('focusin', e => { const t = e.target.closest('.tl'); if (t) show(t); });
+    root.addEventListener('focusout', e => { const t = e.target.closest('.tl'); if (t) hide(t); });
+    root.addEventListener('click', e => {
+      const t = e.target.closest('.tl'); if (!t) return;
+      const row = rows.find(R => R.el.contains(t));
+      if (active === t && e.pointerType !== 'mouse') { hide(t); if (row) row.tsT = 1; } else { show(t); rows.forEach(R => R.tsT = R === row ? 0 : 1); }
+    });
+    document.addEventListener('click', e => { if (active && !e.target.closest('[data-gs]')) { hide(); rows.forEach(R => R.tsT = 1); } });
+
+    function applyFilter() {
+      $$('.tl', root).forEach(t => { const hit = filter === 'all' || t.dataset.cat === filter; t.classList.toggle('is-dim', !hit); t.classList.toggle('is-hit', hit && filter !== 'all'); });
+    }
+    $$('.chip').forEach(c => c.addEventListener('click', () => {
+      filter = c.dataset.f;
+      $$('.chip').forEach(o => { const on = o === c; o.classList.toggle('is-on', on); o.setAttribute('aria-pressed', on); });
+      applyFilter(); boost = 4;
+    }));
+    if (pauseBtn) {
+      if (reduce) pauseBtn.hidden = true;
+      pauseBtn.addEventListener('click', () => { paused = !paused; pauseBtn.setAttribute('aria-pressed', paused); $('span', pauseBtn).textContent = paused ? 'Play' : 'Pause'; });
+    }
+  })();
+
+  /* ---------- one lead travelling through the stack ---------- */
+  (() => {
+    const fl = $('[data-flow]'); if (!fl) return;
+    const steps = $$('.fl__track li', fl), dot = $('[data-flow-dot]', fl), clock = $('[data-flow-clock]', fl);
+    const times = ['Mon 08:02', 'Mon 08:03', 'Mon 08:05', 'Tue 09:12', 'Tue 11:40', 'Thu 16:30'];
+    let i = -1, timer, inView = false;
+    const set = (k) => {
+      steps.forEach((s, j) => { s.classList.toggle('is-on', j <= k); s.classList.toggle('is-now', j === k); });
+      const p = Math.max(0, k) / (steps.length - 1);
+      dot.style.width = p * 100 + '%';
+      fl.style.setProperty('--fx', p * 100 + '%'); clock.textContent = k < 0 ? '' : times[k];
+    };
+    if (reduce) { set(steps.length - 1); return; }
+    const next = () => {
+      clearTimeout(timer); if (!inView) return;
+      i = i >= steps.length - 1 ? 0 : i + 1; set(i);
+      timer = setTimeout(next, i === steps.length - 1 ? 3200 : 1500);
+    };
+    new IntersectionObserver(es => { const was = inView; inView = es[0].isIntersecting; if (inView && !was) next(); else if (!inView) clearTimeout(timer); }, { threshold: .35 }).observe(fl);
+    set(-1);
+  })();
+
   /* ---------- nav, progress, clock, menu ---------- */
   const nav = $('[data-nav]'), bar = $('.progress i');
   const onScroll = () => {
