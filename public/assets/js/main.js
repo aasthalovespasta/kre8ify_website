@@ -71,9 +71,15 @@
   const bars = $$(".bar__fill");
   if (bars.length && "IntersectionObserver" in window && !reduce) {
     const bio = new IntersectionObserver((entries) => {
-      entries.forEach((en) => { if (en.isIntersecting) { en.target.style.setProperty("--v", en.target.dataset.v); bio.unobserve(en.target); } });
+      // Observe the track: a fill scaled to 0 has no area and would never intersect.
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const fill = en.target.querySelector(".bar__fill");
+        if (fill) fill.style.setProperty("--v", fill.dataset.v);
+        bio.unobserve(en.target);
+      });
     }, { threshold: 0.3 });
-    bars.forEach((b) => bio.observe(b));
+    bars.forEach((b) => bio.observe(b.parentElement));
   } else {
     bars.forEach((b) => b.style.setProperty("--v", b.dataset.v));
   }
