@@ -100,31 +100,92 @@
     $$('.split').forEach(h => gsap.from($$('.w > span', h), { yPercent: 110, duration: 1.1, ease: 'expo.out', stagger: .035, scrollTrigger: { trigger: h, start: 'top 85%' } }));
     $$('.hero .hw').forEach((w, i) => gsap.fromTo(w, { fontStretch: '62%' }, { fontStretch: '116%', duration: 1.6, delay: .3 + i * .06, ease: 'expo.out', clearProps: 'fontStretch' }));
     /* hero parallax out */
-    gsap.to('.console', { y: -60, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    
     gsap.to('.hero__copy', { y: -30, opacity: .3, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'center top', end: 'bottom top', scrub: true } });
     scatter(); zero(); model(); ring(); dashBars(); founderParallax(); widthMorph(); casesIn();
   }
 
-  /* ---------- hero console: weeks 1..12 loop ---------- */
+  /* ---------- hero founder stage ---------- */
   (() => {
-    const meter = $('[data-meter]'), mbar = $('[data-meter-bar]'), wk = $('[data-meter-week]'), ops = $$('[data-ops] li'), meet = $('[data-meet]'), ln = $('.console__chart .ln');
-    const con = $('.console');
-    const set = (w) => {
-      const v = Math.min(1, w / 12);
-      meter.textContent = (Math.round(v * 100) / 100).toFixed(2);
-      mbar.style.width = (v * 100) + '%';
-      wk.textContent = 'Week ' + w;
-      let last = null;
-      ops.forEach(li => { const on = +li.dataset.w <= w; li.classList.toggle('is-on', on); li.classList.remove('is-now'); if (on) last = li; });
-      if (last) last.classList.add('is-now');
-      meet.textContent = w < 5 ? 0 : Math.round((w - 4) * 1.4);
-      ln.style.setProperty('--dash', 600 - 600 * v);
+    const st = $('[data-stage]'); if (!st) return;
+    const arch = $('[data-tilt]', st), lens = $('[data-lens]', st), ring = $('[data-ring-p]', st);
+    const meter = $('[data-meter]', st), mbar = $('[data-meter-bar]', st), wk = $('[data-meter-week]', st);
+    const view = $('[data-feed-view]', st), burst = $('[data-burst]', st);
+    const events = $$('[data-feed] li', st).map(li => ({ w: +li.dataset.w, ic: li.dataset.ic, t: li.dataset.t, s: li.dataset.s, g: li.dataset.g }));
+    const depthEls = $$('[data-depth]', st);
+    const setReady = (v, w) => { meter.textContent = v.toFixed(2); mbar.style.width = v * 100 + '%'; ring.style.setProperty('--p', v); wk.textContent = 'week ' + w; st.classList.toggle('is-one', v >= 1); };
+
+    // colour lens + 3D tilt + parallax depth, driven by the pointer anywhere in the hero
+    const hero = $('.hero');
+    let lr = 0, tlr = 0, lx = 50, ly = 30, tlx = 50, tly = 30, rx = 0, ry = 0, trx = 0, try_ = 0, px = 0, py = 0, tpx = 0, tpy = 0, raf = 0, auto = !fine;
+    const loop = (t) => {
+      raf = 0;
+      if (auto) { const k = t / 1000; tlx = 50 + Math.cos(k * .7) * 22; tly = 32 + Math.sin(k * .9) * 16; tlr = 150; }
+      lr += (tlr - lr) * .12; lx += (tlx - lx) * .14; ly += (tly - ly) * .14;
+      rx += (trx - rx) * .1; ry += (try_ - ry) * .1; px += (tpx - px) * .08; py += (tpy - py) * .08;
+      lens.style.setProperty('--lr', lr + 'px'); lens.style.setProperty('--lx', lx + '%'); lens.style.setProperty('--ly', ly + '%');
+      arch.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+      depthEls.forEach(el => { const d = +el.dataset.depth; el.style.translate = `${px * d}px ${py * d}px`; });
+      if (auto || Math.abs(tlr - lr) + Math.abs(tlx - lx) + Math.abs(trx - rx) + Math.abs(tpx - px) > .05) raf = requestAnimationFrame(loop);
     };
-    if (reduce) { set(12); return; }
-    let w = 0, timer = null, visible = true;
-    const step = () => { w = w >= 12 ? 1 : w + 1; set(w); timer = setTimeout(step, w === 12 ? 2600 : 850); };
-    new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && !timer) step(); if (!visible) { clearTimeout(timer); timer = null; } }).observe(con);
-    if (fine) con.addEventListener('pointermove', e => { const r = con.getBoundingClientRect(); con.style.setProperty('--mx', (e.clientX - r.left) + 'px'); con.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
+    const kick = () => { if (!raf) raf = requestAnimationFrame(loop); };
+    if (!reduce) {
+      hero.addEventListener('pointermove', e => {
+        if (e.pointerType !== 'mouse') return;
+        auto = false; st.classList.add('is-touched');
+        const r = lens.getBoundingClientRect(), h = hero.getBoundingClientRect();
+        tlx = (e.clientX - r.left) / r.width * 100; tly = (e.clientY - r.top) / r.height * 100;
+        const inside = e.clientX > r.left - 60 && e.clientX < r.right + 60 && e.clientY > r.top - 60 && e.clientY < r.bottom + 60;
+        tlr = inside ? 170 : 0;
+        const nx = (e.clientX - h.left) / h.width - .5, ny = (e.clientY - h.top) / h.height - .5;
+        try_ = nx * 14; trx = -ny * 10; tpx = nx * -18; tpy = ny * -14;
+        kick();
+      });
+      hero.addEventListener('pointerleave', () => { tlr = 0; trx = try_ = tpx = tpy = 0; kick(); });
+      lens.addEventListener('click', () => { tlr = tlr > 400 ? 170 : 900; kick(); });
+      if (auto) kick();
+    } else lens.style.setProperty('--lr', '2000px');
+
+    // event feed: a new card every ~1.9s, readiness climbs with the week, 1.00 bursts
+    const show = (ev) => {
+      const li = document.createElement('li');
+      li.className = ev.g === 'cash' ? 'is-cash' : '';
+      li.innerHTML = `<img src="assets/icons/${ev.ic}.svg" alt=""><span><b>${ev.t}</b><small>${ev.s}</small></span><em>${ev.g}</em>`;
+      view.append(li);
+      const items = [...view.children];
+      items.forEach((el, i) => { const k = items.length - 1 - i; el.style.transition = 'transform .7s cubic-bezier(.16,1,.3,1), opacity .5s'; el.style.transform = `translateY(${-k * 64}px) scale(${1 - k * .05})`; el.style.opacity = k > 2 ? 0 : 1 - k * .22; });
+      if (!reduce) { li.style.transform = 'translateY(40px) scale(.9)'; li.style.opacity = 0; requestAnimationFrame(() => requestAnimationFrame(() => { li.style.transform = ''; li.style.opacity = 1; })); }
+      if (items.length > 4) items[0].remove();
+    };
+    const pop = () => {
+      if (reduce || !hasG) return;
+      for (let i = 0; i < 22; i++) {
+        const d = document.createElement('i'); d.style.background = ['#e2e2b6', '#6eacda', '#f2f1e4', '#9fc9e8'][i % 4]; burst.append(d);
+        const a = Math.random() * 6.283, r = 120 + Math.random() * 160;
+        gsap.fromTo(d, { x: 0, y: 0, scale: 1, opacity: 1 }, { x: Math.cos(a) * r, y: Math.sin(a) * r, scale: .2, opacity: 0, duration: 1.2 + Math.random() * .6, ease: 'expo.out', onComplete: () => d.remove() });
+      }
+    };
+    if (reduce) { setReady(1, 12); events.slice(-3).forEach(show); return; }
+    let i = 0, timer = null;
+    const step = () => {
+      const ev = events[i]; show(ev); setReady(Math.min(1, ev.w / 12), ev.w);
+      if (ev.g === 'cash') pop();
+      i = (i + 1) % events.length;
+      timer = setTimeout(i === 0 ? () => { view.innerHTML = ''; setReady(0, 1); timer = setTimeout(step, 900); } : step, i === 0 ? 3200 : 1900);
+    };
+    new IntersectionObserver(es => { if (es[0].isIntersecting) { if (!timer) timer = setTimeout(step, 1400); } else { clearTimeout(timer); timer = null; } }).observe(st);
+
+    // entrance + scroll-out
+    if (hasG) {
+      gsap.fromTo(lens, { clipPath: 'inset(100% 0 0 0 round 400px 400px 30px 30px)' }, { clipPath: 'inset(0% 0 0 0 round 400px 400px 30px 30px)', duration: 1.6, ease: 'expo.inOut', delay: .2 });
+      gsap.from($$('.ph', lens), { scale: 1.3, duration: 2.2, ease: 'expo.out', delay: .2 });
+      gsap.fromTo($('.fstage__shine', st), { xPercent: -100 }, { xPercent: 100, duration: 1.4, delay: 1.4, ease: 'power2.inOut' });
+      gsap.from([...depthEls, $('.fstage__name', st)], { opacity: 0, y: 30, scale: .9, duration: 1, stagger: .12, delay: 1, ease: 'back.out(1.6)' });
+      if (window.ScrollTrigger) {
+        gsap.to(arch, { scale: .88, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+        depthEls.forEach((el, k) => gsap.to(el, { y: -(60 + k * 40), x: (k % 2 ? 1 : -1) * (30 + k * 12), ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } }));
+      }
+    }
   })();
 
   /* ---------- problem: scattered pieces become one system ---------- */

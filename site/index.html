@@ -68,31 +68,48 @@
       </dl>
     </div>
 
-    <!-- live 0→1 console -->
-    <div class="console-wrap reveal">
-    <div class="hero__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><defs><path id="cS" d="M60 60 m-47 0 a47 47 0 1 1 94 0 a47 47 0 1 1 -94 0"/></defs><text><textPath href="#cS">krish takes every first call · </textPath></text></svg><img src="assets/img/krish-face.webp" alt=""></div>
-    <div class="console" aria-label="A live view of a founder's business moving from 0 to 1" role="img">
-      <div class="console__bar mono"><span class="lights"><i></i><i></i><i></i></span><span>kreatify / 0→1 os</span><span class="live"><span class="dot"></span>running</span></div>
-      <div class="console__body">
-        <div class="meter">
-          <div class="meter__top mono"><span>Business readiness</span><span data-meter-week>Week 1</span></div>
-          <div class="meter__num"><span data-meter>0.00</span><small class="mono">→ 1.00</small></div>
-          <div class="meter__rail"><i data-meter-bar></i><span class="mono">0</span><span class="mono">1</span></div>
+    <!-- founder stage: Krish in an arch, live readiness ring, floating proof, event feed -->
+    <div class="fstage" data-stage>
+      <div class="fstage__arch" data-tilt>
+        <div class="fstage__ring" data-ring-p aria-hidden="true"></div>
+        <div class="fstage__photo" data-lens>
+          <img class="ph ph--duo" src="assets/img/krish-portrait.webp" alt="" width="670" height="900" fetchpriority="high">
+          <img class="ph ph--color" src="assets/img/krish-portrait.webp" alt="Krish Bhatia, founder of Kreatify, who takes every first call himself" width="670" height="900">
+          <span class="fstage__shine" aria-hidden="true"></span>
+          <span class="fstage__hint mono" aria-hidden="true">move to see Krish in colour</span>
         </div>
-        <ol class="ops" data-ops>
-          <li data-w="1"><span class="ops__ic"><img src="assets/icons/google-docs.svg" alt=""></span><span><b>Company registered</b><small>Pvt Ltd · PAN · GST</small></span><span class="tag mono">set-up</span></li>
-          <li data-w="3"><span class="ops__ic"><img src="assets/icons/linkedin.svg" alt=""></span><span><b>Founder profile rewritten</b><small>voice captured, 30 hooks</small></span><span class="tag mono">content</span></li>
-          <li data-w="5"><span class="ops__ic"><img src="assets/icons/hubspot.svg" alt=""></span><span><b>Signal captured</b><small>VP Sales hired · SaaS, 40 people</small></span><span class="tag mono">gtm</span></li>
-          <li data-w="6"><span class="ops__ic"><img src="assets/icons/whatsapp.svg" alt=""></span><span><b>Lead answered in 40 sec</b><small>AI reply, CRM updated</small></span><span class="tag mono">ai</span></li>
-          <li data-w="8"><span class="ops__ic"><img src="assets/icons/google-calendar.svg" alt=""></span><span><b>Meeting booked</b><small>Thu 4:30 pm · qualified</small></span><span class="tag tag--cream mono">call</span></li>
-          <li data-w="10"><span class="ops__ic"><img src="assets/icons/pdf.svg" alt=""></span><span><b>Invoice paid · ₹70,800</b><small>GST invoice, UPI</small></span><span class="tag tag--cream mono">cash</span></li>
-        </ol>
-        <div class="console__chart">
-          <div class="mono console__chart-h"><span>Qualified meetings / week</span><span data-meet>0</span></div>
-          <svg viewBox="0 0 400 90" preserveAspectRatio="none" aria-hidden="true"><path class="area" d="M0 90 L0 86 C60 85 100 82 150 74 S240 54 290 38 S360 14 400 8 L400 90Z"/><path class="ln" d="M0 86 C60 85 100 82 150 74 S240 54 290 38 S360 14 400 8"/></svg>
-        </div>
+        <div class="fstage__name"><b>Krish Bhatia</b><span class="mono">founder · on every account</span></div>
       </div>
-    </div>
+
+      <div class="ready" data-depth="1.2" aria-hidden="true">
+        <span class="mono">business readiness</span>
+        <b><span data-meter>0.00</span><small class="mono">→ 1.00</small></b>
+        <div class="ready__rail"><i data-meter-bar></i></div>
+        <span class="mono ready__wk" data-meter-week>week 1</span>
+      </div>
+
+      <div class="float float--li" data-depth="1.8" aria-hidden="true">
+        <div class="float__h"><img src="assets/icons/linkedin.svg" alt="">Krish's LinkedIn</div>
+        <b>0 → 28K</b>
+        <svg viewBox="0 0 160 40" preserveAspectRatio="none"><path d="M0 38 C40 37 70 32 95 22 S140 4 160 2"/></svg>
+      </div>
+      <div class="float float--cal" data-depth="2.4" aria-hidden="true">
+        <div class="float__h"><img src="assets/icons/google-calendar.svg" alt="">Meeting booked</div>
+        <b>Thu, 4:30 pm</b><small>from a LinkedIn comment</small>
+      </div>
+
+      <ol class="feed" data-feed aria-hidden="true">
+        <li data-w="1" data-ic="google-docs" data-t="Company registered" data-s="Pvt Ltd · PAN · GST" data-g="set-up"></li>
+        <li data-w="3" data-ic="linkedin" data-t="Founder profile live" data-s="voice captured · 30 hooks" data-g="content"></li>
+        <li data-w="5" data-ic="hubspot" data-t="Buying signal captured" data-s="VP Sales hired · SaaS" data-g="gtm"></li>
+        <li data-w="6" data-ic="whatsapp" data-t="Lead answered in 40 sec" data-s="AI reply · CRM updated" data-g="ai"></li>
+        <li data-w="8" data-ic="google-calendar" data-t="Meeting booked" data-s="Thu 4:30 pm · qualified" data-g="call"></li>
+        <li data-w="12" data-ic="pdf" data-t="Invoice paid · ₹70,800" data-s="GST invoice · UPI" data-g="cash"></li>
+      </ol>
+      <div class="feed-view" data-feed-view aria-hidden="true"></div>
+
+      <div class="hero__sticker" data-depth="2.8" aria-hidden="true"><svg viewBox="0 0 120 120"><defs><path id="cS" d="M60 60 m-47 0 a47 47 0 1 1 94 0 a47 47 0 1 1 -94 0"/></defs><text><textPath href="#cS">zero to one · founder-led · </textPath></text></svg><b>0→1</b></div>
+      <div class="burst" data-burst aria-hidden="true"></div>
     </div>
   </div>
   <div class="hero__scroll mono" aria-hidden="true"><span>Scroll</span><i></i></div>
