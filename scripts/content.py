@@ -219,7 +219,7 @@ TESTIMONIALS = {
             'name': 'Debajit Roy', 'role': 'Corporate trainer and leadership coach',
             'tag': 'Personal branding and outbound',
             'linkedin': 'https://www.linkedin.com/in/debajitroycorporatetrainerleadershipcoach/',
-            'photo': None,  # add debajit-roy.webp to site/assets/people/ and write its name here
+            'photo': 'debajit-roy.webp',
         },
         {
             'quote': "Krish was there while we were building Skilldify. He planned our go-to-market from the ground up: who we sell to, how we reach them, what we say. Then he grew our social media alongside it. He works like it is his own company, and I never had to chase him for an update.",
@@ -233,7 +233,7 @@ TESTIMONIALS = {
             'name': 'Ria Bhide', 'role': 'Founder, Sakhi & Beyond',
             'tag': 'Personal branding and startup 0 to 1',
             'linkedin': 'https://www.linkedin.com/in/ria-bhide/',
-            'photo': None,  # add ria-bhide.webp to site/assets/people/ and write its name here
+            'photo': 'ria-bhide.webp',
         },
     ],
 }

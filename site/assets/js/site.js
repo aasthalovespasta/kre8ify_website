@@ -236,6 +236,37 @@
     if (word) word.addEventListener('pointermove', (e) => { const r = word.getBoundingClientRect(); word.style.setProperty('--sx', e.clientX - r.left + 'px'); word.style.setProperty('--sy', e.clientY - r.top + 'px'); });
   }
 
+  /* Testimonials: client tabs switch the quote; it moves on by itself -------
+     The progress bar on the active tab is a CSS animation. When it ends we
+     show the next quote. Hovering or focusing pauses it; clicking stops it. */
+  const tm = $('[data-tm]');
+  if (tm) {
+    const tabs = $$('[role="tab"]', tm), slides = $$('.tm__slide', tm), counter = $('[data-tm-n]', tm);
+    let current = 0, auto = !reduceMotion;
+    const show = (i, focus = false) => {
+      current = (i + tabs.length) % tabs.length;
+      tabs.forEach((t, k) => { const on = k === current; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
+      slides.forEach((s, k) => { s.hidden = k !== current; s.classList.toggle('is-entering', k === current && !reduceMotion); });
+      counter.textContent = String(current + 1).padStart(2, '0');
+      if (focus) tabs[current].focus();
+    };
+    const stopAuto = () => { auto = false; tm.classList.remove('is-auto'); };
+    tabs.forEach((t, k) => {
+      t.addEventListener('click', () => { stopAuto(); show(k); });
+      t.addEventListener('keydown', (e) => {
+        const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+        if (step) { e.preventDefault(); stopAuto(); show(current + step, true); }
+      });
+      $('.tm__bar', t).addEventListener('animationend', () => { if (auto) show(current + 1); });
+    });
+    $('[data-tm-prev]', tm).addEventListener('click', () => { stopAuto(); show(current - 1); });
+    $('[data-tm-next]', tm).addEventListener('click', () => { stopAuto(); show(current + 1); });
+    ['pointerenter', 'focusin'].forEach((ev) => tm.addEventListener(ev, () => tm.classList.add('is-paused')));
+    ['pointerleave', 'focusout'].forEach((ev) => tm.addEventListener(ev, () => tm.classList.remove('is-paused')));
+    // only start the timer once the section is on screen
+    if (auto) new IntersectionObserver(([e], obs) => { if (e.isIntersecting) { tm.classList.add('is-auto'); obs.disconnect(); } }, { threshold: 0.4 }).observe(tm);
+  }
+
   /* Booking form: checks the fields, then opens WhatsApp with the answers --- */
   const form = $('[data-form]');
   if (form) {

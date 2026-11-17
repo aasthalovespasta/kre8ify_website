@@ -420,19 +420,42 @@ def testimonials():
         name = esc(t['name'])
         if t.get('linkedin'):
             name = f'<a href="{t["linkedin"]}" target="_blank" rel="noopener">{name}<img src="assets/logos/linkedin.svg" alt="LinkedIn profile" width="16" height="16"></a>'
-        face = (f'<img class="quote__face" src="assets/people/{t["photo"]}" alt="{esc(t["name"])}" width="48" height="48" loading="lazy">'
-                if t.get('photo') else f'<i>{initials}</i>')
-        return f'<figcaption>{face}<span><b>{name}</b><small>{esc(t["role"])}</small></span></figcaption>'
+        pic = (f'<img class="quote__face" src="assets/people/{t["photo"]}" alt="{esc(t["name"])}" width="56" height="56" loading="lazy">'
+               if t.get('photo') else f'<i>{initials}</i>')
+        return f'<figcaption>{pic}<span><b>{name}</b><small>{esc(t["role"])}</small></span></figcaption>'
 
-    cards = ''.join(f'''<figure class="quote" data-reveal data-card style="--d:{i * 80}ms">
-      <div class="quote__top">{icon('quote')}{f'<span class="quote__tag">{esc(t["tag"])}</span>' if t.get('tag') else ''}</div>
-      <blockquote>{esc(t['quote'])}</blockquote>
-      {person(t)}
-    </figure>''' for i, t in enumerate(TESTIMONIALS['items']))
+    def face(t, size):
+        initials = ''.join(w[0] for w in t['name'].split()[:2]).upper()
+        if t.get('photo'):
+            return f'<img class="tm__face" src="assets/people/{t["photo"]}" alt="" width="{size}" height="{size}" loading="lazy">'
+        return f'<i class="tm__face tm__face--initials">{initials}</i>'
+
+    items = TESTIMONIALS['items']
+    total = len(items)
+    # one large quote at a time; every quote stays in the page for search engines and screen readers
+    slides = ''.join(f'''<figure class="tm__slide" role="tabpanel" id="tm-{i}" aria-labelledby="tmb-{i}"{'' if i == 0 else ' hidden'}>
+        <div class="quote__top">{icon('quote')}{f'<span class="quote__tag">{esc(t["tag"])}</span>' if t.get('tag') else ''}</div>
+        <blockquote>{esc(t['quote'])}</blockquote>
+        {person(t)}
+      </figure>''' for i, t in enumerate(items))
+    tabs = ''.join(f'''<button class="tm__tab" type="button" role="tab" id="tmb-{i}" aria-controls="tm-{i}" aria-selected="{str(i == 0).lower()}"{'' if i == 0 else ' tabindex="-1"'}>
+        {face(t, 56)}<span><b>{esc(t['name'])}</b><small>{esc(t['role'])}</small></span><i class="tm__bar" aria-hidden="true"></i>
+      </button>''' for i, t in enumerate(items))
     return f'''<section class="section section--paper tex" id="testimonials">
   <div class="wrap">
     {section_head(TESTIMONIALS['label'], TESTIMONIALS['title'])}
-    <div class="quotes">{cards}</div>
+    <div class="tm" data-tm data-reveal>
+      <div class="tm__stage" data-card>
+        <span class="tm__mark" aria-hidden="true">“</span>
+        {slides}
+        <div class="tm__controls">
+          <button class="tm__arrow" type="button" data-tm-prev aria-label="Previous testimonial"><span aria-hidden="true">←</span></button>
+          <p class="tm__count" aria-hidden="true"><b data-tm-n>01</b> / {total:02d}</p>
+          <button class="tm__arrow" type="button" data-tm-next aria-label="Next testimonial"><span aria-hidden="true">→</span></button>
+        </div>
+      </div>
+      <div class="tm__people" role="tablist" aria-label="Choose a client">{tabs}</div>
+    </div>
   </div>
 </section>
 '''
