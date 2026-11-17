@@ -630,8 +630,9 @@ body { overflow-x: clip; }
 .quote blockquote { font-size: 18.5px; }
 .quote figcaption a { display: inline-flex; align-items: center; gap: 6px; }
 .quote figcaption a:hover { color: var(--royal); text-decoration: underline; text-underline-offset: 3px; }
-.quote figcaption img { width: 16px; height: 16px; }
+.quote figcaption a img { width: 16px; height: 16px; }
 .quote figcaption i { font-size: 14px; }
+.quote__face { flex: none; width: 48px; height: 48px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--white), 0 0 0 3.5px var(--sky); }
 
 @media (max-width: 1080px) {
   .pillar__head { grid-template-columns: 1fr; gap: 32px; }

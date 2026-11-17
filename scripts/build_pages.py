@@ -420,7 +420,9 @@ def testimonials():
         name = esc(t['name'])
         if t.get('linkedin'):
             name = f'<a href="{t["linkedin"]}" target="_blank" rel="noopener">{name}<img src="assets/logos/linkedin.svg" alt="LinkedIn profile" width="16" height="16"></a>'
-        return f'<figcaption><i>{initials}</i><span><b>{name}</b><small>{esc(t["role"])}</small></span></figcaption>'
+        face = (f'<img class="quote__face" src="assets/people/{t["photo"]}" alt="{esc(t["name"])}" width="48" height="48" loading="lazy">'
+                if t.get('photo') else f'<i>{initials}</i>')
+        return f'<figcaption>{face}<span><b>{name}</b><small>{esc(t["role"])}</small></span></figcaption>'
 
     cards = ''.join(f'''<figure class="quote" data-reveal data-card style="--d:{i * 80}ms">
       <div class="quote__top">{icon('quote')}{f'<span class="quote__tag">{esc(t["tag"])}</span>' if t.get('tag') else ''}</div>

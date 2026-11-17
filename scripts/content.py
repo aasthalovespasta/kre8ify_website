@@ -207,6 +207,8 @@ WORK = {
 
 # Client words. Get each person's OK on their quote before the site goes live.
 # 'tag' is the service shown on the card; 'linkedin' links their name to their profile.
+# 'photo' is a square image in site/assets/people/ (their LinkedIn photo works well).
+#   Without a photo the card shows their initials.
 # Leave the list empty  [ ]  to hide the section.
 TESTIMONIALS = {
     'label': 'Testimonials',
@@ -217,18 +219,21 @@ TESTIMONIALS = {
             'name': 'Debajit Roy', 'role': 'Corporate trainer and leadership coach',
             'tag': 'Personal branding and outbound',
             'linkedin': 'https://www.linkedin.com/in/debajitroycorporatetrainerleadershipcoach/',
+            'photo': None,  # add debajit-roy.webp to site/assets/people/ and write its name here
         },
         {
             'quote': "Krish was there while we were building Skilldify. He planned our go-to-market from the ground up: who we sell to, how we reach them, what we say. Then he grew our social media alongside it. He works like it is his own company, and I never had to chase him for an update.",
             'name': 'Shivangi Narula', 'role': 'Founder, Skilldify',
             'tag': 'GTM and social media',
             'linkedin': 'https://www.linkedin.com/in/shivanginarula/',
+            'photo': 'shivangi-narula.webp',
         },
         {
             'quote': "I came in with Sakhi & Beyond as an idea and a LinkedIn profile I hardly used. Kreatify is helping me with both at the same time: getting the brand ready to launch, and making sure people know who is behind it. Krish is very hands-on, and honest about what will work and what will not.",
             'name': 'Ria Bhide', 'role': 'Founder, Sakhi & Beyond',
             'tag': 'Personal branding and startup 0 to 1',
             'linkedin': 'https://www.linkedin.com/in/ria-bhide/',
+            'photo': None,  # add ria-bhide.webp to site/assets/people/ and write its name here
         },
     ],
 }
