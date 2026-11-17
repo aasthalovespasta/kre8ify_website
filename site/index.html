@@ -32,49 +32,75 @@
   </div>
 </header>
 <main id="main">
-<section class="hero" id="top">
+<section class="hero" id="top" data-hero>
+  <div class="hero__bg" aria-hidden="true"><i class="orb orb--1"></i><i class="orb orb--2"></i><i class="orb orb--3"></i><span class="hero__dots"></span></div>
   <div class="wrap hero__grid">
-    <div class="hero__copy">
-      <p class="label label--light rise" style="--i:0">Founder-led growth studio · New Delhi</p>
-      <h1 class="h1 rise" style="--i:1">We make founders <em>impossible to ignore.</em></h1>
-      <p class="hero__lead rise" style="--i:2">We help early-stage startups build the founder's brand, run their content and social media, and turn that attention into clients.</p>
-      <div class="hero__ctas rise" style="--i:3">
-        <a class="btn btn--primary" href="#book">Book a call with Krish <span class="arr" aria-hidden="true">→</span></a>
+    <div class="hero__copy" data-scroll>
+      <p class="eyebrow rise" style="--i:0"><span class="pulse"></span>Founder-led growth studio · New Delhi</p>
+      <h1 class="h1 words"><span class="w"><span style="--w:0">We</span></span> <span class="w"><span style="--w:1">make</span></span> <span class="w"><span style="--w:2">founders</span></span> <em><span class="w"><span style="--w:3">impossible</span></span> <span class="w"><span style="--w:4">to</span></span> <span class="w"><span style="--w:5">ignore.</span></span></em></h1>
+      <p class="hero__lead rise" style="--i:4">We help early-stage startups build the founder's brand, run their content and social media, and turn that attention into clients.</p>
+      <div class="hero__ctas rise" style="--i:5">
+        <a class="btn btn--primary magnetic" href="#book">Book a call with Krish <span class="arr" aria-hidden="true">→</span></a>
         <a class="btn btn--ghost" href="#services">See our services</a>
       </div>
     </div>
-    <div class="hero__media rise" style="--i:2">
-      <div class="hero__photo"><img src="assets/img/krish-hero.webp" alt="Krish Bhatia, founder of Kreatify" width="770" height="1013" fetchpriority="high"></div>
-      <div class="hero__chip hero__chip--1"><img src="assets/logos/linkedin.svg" alt="" width="20" height="20"><span><small>Krish's LinkedIn</small><b>0 to 28K+</b></span></div><div class="hero__chip hero__chip--2"><img src="assets/logos/gcal.svg" alt="" width="20" height="20"><span><small>Meeting booked</small><b>Thu, 4:30 pm</b></span></div>
+
+    <!-- founder stage: duotone photo that turns to colour under the cursor, floating proof cards -->
+    <div class="stage" data-stage>
+      <div class="stage__arch" data-tilt>
+        <div class="stage__photo" data-lens>
+          <img class="ph ph--duo" src="assets/img/krish-hero.webp" alt="" width="770" height="1013" fetchpriority="high">
+          <img class="ph ph--color" src="assets/img/krish-hero.webp" alt="Krish Bhatia, founder of Kreatify" width="770" height="1013">
+          <span class="stage__hint" aria-hidden="true">Move here to see Krish in colour</span>
+        </div>
+        <p class="stage__name"><b>Krish Bhatia</b><span>Founder, on every account</span></p>
+      </div>
+      <div class="float float--li" data-depth="1.6" aria-hidden="true">
+        <p class="float__h"><img src="assets/logos/linkedin.svg" alt="" width="18" height="18">Krish's LinkedIn</p>
+        <b>0 to 28K+</b>
+        <svg viewBox="0 0 160 40" preserveAspectRatio="none"><path d="M0 38 C40 37 70 32 95 22 S140 4 160 2"/></svg>
+      </div>
+      <div class="float float--cal" data-depth="2.4" aria-hidden="true">
+        <p class="float__h"><img src="assets/logos/gcal.svg" alt="" width="18" height="18">Meeting booked</p>
+        <b>Thu, 4:30 pm</b>
+      </div>
+      <div class="sticker" data-depth="3" aria-hidden="true">
+        <svg viewBox="0 0 120 120"><defs><path id="sticker-ring" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs><text><textPath href="#sticker-ring">founder-led · zero to one · founder-led · zero to one · </textPath></text></svg>
+        <b>0→1</b>
+      </div>
+      <ol class="feed" data-feed data-depth="1.1" aria-hidden="true"><li><img src="assets/logos/linkedin.svg" alt="" width="20" height="20"><span><b>Post published</b><small>Written in your voice</small></span></li><li><img src="assets/logos/linkedin.svg" alt="" width="20" height="20"><span><b>Profile viewed</b><small>Founder at Saffron Labs</small></span></li><li><img src="assets/logos/whatsapp.svg" alt="" width="20" height="20"><span><b>Reply in 40 seconds</b><small>Lead answered, CRM updated</small></span></li><li><img src="assets/logos/gcal.svg" alt="" width="20" height="20"><span><b>Meeting booked</b><small>Thursday, 4:30 pm</small></span></li><li><img src="assets/logos/docs.svg" alt="" width="20" height="20"><span><b>Client signed</b><small>Proposal accepted</small></span></li></ol>
     </div>
   </div>
-  <div class="wrap clients rise" style="--i:4">
+
+  <div class="logos rise" style="--i:6">
     <p class="label label--light">Brands we have worked with</p>
-    <ul class="clients__list"><li>Unacademy</li><li>Headfield</li><li>Roofs &amp; Assets</li><li>Ganga Realty</li></ul>
+    <div class="logos__track"><ul class="logos__row"><li class="client"><img src="assets/clients/unacademy.svg" alt="Unacademy" loading="lazy"></li><li class="client"><img src="assets/clients/experion.webp" alt="Experion Developers" loading="lazy"></li><li class="client"><img src="assets/clients/ganga-realty.svg" alt="Ganga Realty" loading="lazy"></li><li class="client"><span>Headfield</span></li><li class="client"><span>Roofs &amp; Assets</span></li><li class="client" aria-hidden="true"><img src="assets/clients/unacademy.svg" alt="" loading="lazy"></li><li class="client" aria-hidden="true"><img src="assets/clients/experion.webp" alt="" loading="lazy"></li><li class="client" aria-hidden="true"><img src="assets/clients/ganga-realty.svg" alt="" loading="lazy"></li><li class="client" aria-hidden="true"><span>Headfield</span></li><li class="client" aria-hidden="true"><span>Roofs &amp; Assets</span></li><li class="client" aria-hidden="true"><img src="assets/clients/unacademy.svg" alt="" loading="lazy"></li><li class="client" aria-hidden="true"><img src="assets/clients/experion.webp" alt="" loading="lazy"></li><li class="client" aria-hidden="true"><img src="assets/clients/ganga-realty.svg" alt="" loading="lazy"></li><li class="client" aria-hidden="true"><span>Headfield</span></li><li class="client" aria-hidden="true"><span>Roofs &amp; Assets</span></li></ul></div>
   </div>
 </section>
-<section class="section section--paper" id="problem">
+<section class="section section--paper tex" id="problem">
   <div class="wrap">
     <div class="head" data-reveal>
       <p class="label">The real problem</p>
-      <h2 class="h2">You're not lazy. <em>You're just invisible.</em></h2>
+      <h2 class="h2 words"><span class="w"><span style="--w:0">You're</span></span> <span class="w"><span style="--w:1">not</span></span> <span class="w"><span style="--w:2">lazy.</span></span> <em><span class="w"><span style="--w:3">You're</span></span> <span class="w"><span style="--w:4">just</span></span> <span class="w"><span style="--w:5">invisible.</span></span></em></h2>
       <p class="lead">You're posting here, messaging there and keeping leads in a notebook. Nothing is connected, so nothing grows. Scroll, and watch it become one system.</p>
     </div>
-    <div class="problem" data-inview>
-      <article class="pcard" style="--d:0ms"><p class="pcard__tag">01 · Brand</p><h3>Nobody knows who you are</h3><p>Great at the work, unknown outside your circle.</p></article><article class="pcard" style="--d:70ms"><p class="pcard__tag">02 · Offer</p><h3>Nobody gets what you sell</h3><p>You explain it differently every time.</p></article><article class="pcard" style="--d:140ms"><p class="pcard__tag">03 · Content</p><h3>Last post: 3 months ago</h3><p>No time, and it never sounds like you.</p></article><article class="pcard" style="--d:210ms"><p class="pcard__tag">04 · Social</p><h3>Your profile is a dead end</h3><p>People check you out, see nothing, and leave.</p></article><article class="pcard" style="--d:280ms"><p class="pcard__tag">05 · Outreach</p><h3>100 messages. 2 replies.</h3><p>Same message, wrong person, wrong time.</p></article><article class="pcard" style="--d:350ms"><p class="pcard__tag">06 · Follow-up</p><h3>Good leads go cold</h3><p>Someone shows interest. Nobody replies for four days.</p></article>
+    <div class="problem" data-inview data-scroll data-assemble>
+      <article class="pcard" style="--sx:-70;--sy:90;--sr:-9"><p class="pcard__tag">01 · Brand</p><h3>Nobody knows who you are</h3><p>Great at the work, unknown outside your circle.</p></article><article class="pcard" style="--sx:40;--sy:150;--sr:6"><p class="pcard__tag">02 · Offer</p><h3>Nobody gets what you sell</h3><p>You explain it differently every time.</p></article><article class="pcard" style="--sx:90;--sy:60;--sr:11"><p class="pcard__tag">03 · Content</p><h3>Last post: 3 months ago</h3><p>No time, and it never sounds like you.</p></article><article class="pcard" style="--sx:-40;--sy:-120;--sr:7"><p class="pcard__tag">04 · Social</p><h3>Your profile is a dead end</h3><p>People check you out, see nothing, and leave.</p></article><article class="pcard" style="--sx:-70;--sy:-60;--sr:-12"><p class="pcard__tag">05 · Outreach</p><h3>100 messages. 2 replies.</h3><p>Same message, wrong person, wrong time.</p></article><article class="pcard" style="--sx:80;--sy:-140;--sr:-6"><p class="pcard__tag">06 · Follow-up</p><h3>Good leads go cold</h3><p>Someone shows interest. Nobody replies for four days.</p></article>
       <div class="problem__hub" aria-hidden="true"><span>One system</span></div>
     </div>
   </div>
 </section>
-<section class="section section--dark" id="services">
+<div class="band" aria-hidden="true" data-scroll><p data-band>Personal branding · Social media · Influencers · GTM engineering · 0 to 1 · Personal branding · Social media · Influencers · GTM engineering · 0 to 1 · Personal branding · Social media · Influencers · GTM engineering · 0 to 1 · </p></div>
+<section class="section section--dark tex-dark" id="services">
+  <div class="services__glow" aria-hidden="true"></div>
   <div class="wrap">
     <div class="head" data-reveal>
       <p class="label">Services</p>
-      <h2 class="h2">What we do <em>for founders.</em></h2>
+      <h2 class="h2 words"><span class="w"><span style="--w:0">What</span></span> <span class="w"><span style="--w:1">we</span></span> <span class="w"><span style="--w:2">do</span></span> <em><span class="w"><span style="--w:3">for</span></span> <span class="w"><span style="--w:4">founders.</span></span></em></h2>
       <p class="lead">Five services that work on their own or together. Start with the one that matters most right now.</p>
     </div>
     <div class="services">
-  <article class="svc" data-inview>
+  <article class="svc" data-inview data-card>
     <div class="art art--branding" aria-hidden="true">
       <div class="mini mini--post a1">
         <div class="mini__who"><img src="assets/img/krish-face.webp" alt="" width="32" height="32"><span><b>Krish Bhatia</b><small>Founder · 2d</small></span></div>
@@ -89,7 +115,7 @@
     <ul class="svc__list"><li><span>01</span>Profile rewrite</li><li><span>02</span>Voice interview</li><li><span>03</span>12 posts a month</li><li><span>04</span>Carousels and visuals</li><li><span>05</span>Daily engagement</li><li><span>06</span>Warm conversations</li></ul>
     <a class="svc__link" href="personal-branding.html" aria-label="How Personal branding works">How it works <span class="arr" aria-hidden="true">→</span></a>
   </article>
-  <article class="svc" data-inview>
+  <article class="svc" data-inview data-card>
     <div class="art art--launch" aria-hidden="true">
       <div class="mini mini--check a1">
         <p class="mini__label">Your brand, step by step</p>
@@ -103,7 +129,7 @@
     <ul class="svc__list"><li><span>01</span>Company set-up with CAs</li><li><span>02</span>Name and identity</li><li><span>03</span>Offer and pitch</li><li><span>04</span>First client pipeline</li><li><span>05</span>Contracts and onboarding</li><li><span>06</span>Weekly routine</li></ul>
     <a class="svc__link" href="business-development.html" aria-label="How 0 to 1 brand building works">How it works <span class="arr" aria-hidden="true">→</span></a>
   </article>
-  <article class="svc" data-inview>
+  <article class="svc" data-inview data-card>
     <div class="art art--gtm" aria-hidden="true">
       <div class="mini mini--leads a1">
         <p class="mini__label">Buyers worth talking to</p>
@@ -118,7 +144,7 @@
     <ul class="svc__list"><li><span>01</span>Ideal buyer list</li><li><span>02</span>Buying signals</li><li><span>03</span>Email and LinkedIn outreach</li><li><span>04</span>Fast AI replies</li><li><span>05</span>CRM set-up</li><li><span>06</span>Weekly report</li></ul>
     <a class="svc__link" href="gtm-engineering.html" aria-label="How GTM engineering works">How it works <span class="arr" aria-hidden="true">→</span></a>
   </article>
-  <article class="svc" data-inview>
+  <article class="svc" data-inview data-card>
     <div class="art art--social" aria-hidden="true">
       <div class="mini mini--profile a1">
         <div class="ig"><i class="ig__av">K</i><span><b>16</b><small>posts</small></span><span><b>2.4K</b><small>followers</small></span><span><b>48</b><small>DMs</small></span></div>
@@ -131,7 +157,7 @@
     <ul class="svc__list"><li><span>01</span>Profile set-up</li><li><span>02</span>Content calendar</li><li><span>03</span>Reels and carousels</li><li><span>04</span>Shoots and editing</li><li><span>05</span>Posting and replies</li><li><span>06</span>Monthly report</li></ul>
     <a class="svc__link" href="social-media.html" aria-label="How Social media management works">How it works <span class="arr" aria-hidden="true">→</span></a>
   </article>
-  <article class="svc" data-inview>
+  <article class="svc" data-inview data-card>
     <div class="art art--creators" aria-hidden="true">
       <div class="mini mini--creators a1">
         <p class="mini__label">Campaign · India launch</p>
@@ -158,54 +184,55 @@
   <div class="wrap">
     <div class="head" data-reveal>
       <p class="label">How we work</p>
-      <h2 class="h2">Simple from <em>the first call.</em></h2>
+      <h2 class="h2 words"><span class="w"><span style="--w:0">Simple</span></span> <span class="w"><span style="--w:1">from</span></span> <em><span class="w"><span style="--w:2">the</span></span> <span class="w"><span style="--w:3">first</span></span> <span class="w"><span style="--w:4">call.</span></span></em></h2>
       
     </div>
-    <ol class="process" data-inview><li style="--d:0ms"><span class="process__n">1</span><h3>A 30-minute call</h3><p>You talk to Krish about where the business is and where it is stuck.</p></li><li style="--d:90ms"><span class="process__n">2</span><h3>A clear plan</h3><p>Within 48 hours you get a written plan: what we will do, in what order, and why.</p></li><li style="--d:180ms"><span class="process__n">3</span><h3>Set up in your name</h3><p>Every account, tool and asset we create belongs to you from day one.</p></li><li style="--d:270ms"><span class="process__n">4</span><h3>A report every Monday</h3><p>A short video from Krish and a one-page report. You always know what is working.</p></li></ol>
+    <ol class="process" data-inview data-scroll><li style="--d:0ms"><span class="process__n">1</span><h3>A 30-minute call</h3><p>You talk to Krish about where the business is and where it is stuck.</p></li><li style="--d:90ms"><span class="process__n">2</span><h3>A clear plan</h3><p>Within 48 hours you get a written plan: what we will do, in what order, and why.</p></li><li style="--d:180ms"><span class="process__n">3</span><h3>Set up in your name</h3><p>Every account, tool and asset we create belongs to you from day one.</p></li><li style="--d:270ms"><span class="process__n">4</span><h3>A report every Monday</h3><p>A short video from Krish and a one-page report. You always know what is working.</p></li></ol>
   </div>
 </section>
-<section class="section section--dark" id="work">
+<section class="section section--dark tex-dark" id="work">
   <div class="wrap">
     <div class="head" data-reveal>
       <p class="label">Our work</p>
-      <h2 class="h2">Results we can <em>point to.</em></h2>
+      <h2 class="h2 words"><span class="w"><span style="--w:0">Results</span></span> <span class="w"><span style="--w:1">we</span></span> <span class="w"><span style="--w:2">can</span></span> <em><span class="w"><span style="--w:3">point</span></span> <span class="w"><span style="--w:4">to.</span></span></em></h2>
       
     </div>
-    <div class="cases"><article class="case" data-reveal style="--d:0ms">
+    <div class="cases"><article class="case" data-reveal data-card style="--d:0ms">
       <p class="case__tag">Personal branding</p>
       <b class="case__fig">0 to 28K+</b><p class="case__figlabel">LinkedIn followers, no ads</p>
       <h3>Krish&#x27;s own LinkedIn</h3><p class="case__text">The same playbook we run for clients, tested first on our founder.</p>
-    </article><article class="case" data-reveal style="--d:80ms">
+    </article><article class="case" data-reveal data-card style="--d:80ms">
       <p class="case__tag">Influencer marketing</p>
       <b class="case__fig">40+</b><p class="case__figlabel">creators in one campaign</p>
       <h3>Headfield</h3><p class="case__text">Creators sourced, briefed and managed for an India launch, online and on the ground.</p>
-    </article><article class="case" data-reveal style="--d:160ms">
+    </article><article class="case" data-reveal data-card style="--d:160ms">
       <p class="case__tag">Social media</p>
       <b class="case__fig">3 to 4x</b><p class="case__figlabel">social growth</p>
       <h3>Roofs &amp; Assets</h3><p class="case__text">Founder-led content, shoots, scripts and editing for a real estate brand.</p>
-    </article><article class="case" data-reveal style="--d:240ms">
+    </article><article class="case" data-reveal data-card style="--d:240ms">
       <p class="case__tag">Influencer marketing</p>
       <b class="case__fig">Reels to visits</b><p class="case__figlabel">UGC built for site visits</p>
       <h3>Ganga Realty</h3><p class="case__text">Creator reels with hooks written for buyers, managed end to end.</p>
     </article></div>
+    <ul class="logo-wall" data-reveal><li class="client"><img src="assets/clients/unacademy.svg" alt="Unacademy" loading="lazy"></li><li class="client"><img src="assets/clients/experion.webp" alt="Experion Developers" loading="lazy"></li><li class="client"><img src="assets/clients/ganga-realty.svg" alt="Ganga Realty" loading="lazy"></li><li class="client"><span>Headfield</span></li><li class="client"><span>Roofs &amp; Assets</span></li></ul>
   </div>
 </section>
-<section class="section section--paper" id="testimonials">
+<section class="section section--paper tex" id="testimonials">
   <div class="wrap">
     <div class="head" data-reveal>
       <p class="label">Testimonials</p>
-      <h2 class="h2">What clients <em>say.</em></h2>
+      <h2 class="h2 words"><span class="w"><span style="--w:0">What</span></span> <span class="w"><span style="--w:1">clients</span></span> <em><span class="w"><span style="--w:2">say.</span></span></em></h2>
       
     </div>
-    <div class="quotes"><figure class="quote" data-reveal style="--d:0ms">
+    <div class="quotes"><figure class="quote" data-reveal data-card style="--d:0ms">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h4v4c0 3-1.5 5-4 6M15 7h4v4c0 3-1.5 5-4 6"/></svg>
       <blockquote>[Client&#x27;s words go here. Two or three sentences about what changed for them work best.]</blockquote>
       <figcaption><i>C</i><span><b>[Client name]</b><small>[Role, Company]</small></span></figcaption>
-    </figure><figure class="quote" data-reveal style="--d:80ms">
+    </figure><figure class="quote" data-reveal data-card style="--d:80ms">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h4v4c0 3-1.5 5-4 6M15 7h4v4c0 3-1.5 5-4 6"/></svg>
       <blockquote>[Client&#x27;s words go here. A specific result, like more enquiries or a busier calendar, reads well.]</blockquote>
       <figcaption><i>C</i><span><b>[Client name]</b><small>[Role, Company]</small></span></figcaption>
-    </figure><figure class="quote" data-reveal style="--d:160ms">
+    </figure><figure class="quote" data-reveal data-card style="--d:160ms">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h4v4c0 3-1.5 5-4 6M15 7h4v4c0 3-1.5 5-4 6"/></svg>
       <blockquote>[Client&#x27;s words go here. What it was like to work with Krish and the team.]</blockquote>
       <figcaption><i>C</i><span><b>[Client name]</b><small>[Role, Company]</small></span></figcaption>
@@ -214,14 +241,14 @@
 </section>
 <section class="section section--white" id="founder">
   <div class="wrap founder">
-    <figure class="founder__photo" data-reveal>
+    <figure class="founder__photo" data-reveal data-scroll>
       <img src="assets/img/krish.webp" alt="Krish Bhatia, founder of Kreatify" width="929" height="1280" loading="lazy">
       <figcaption><b>Krish Bhatia</b><span>Founder · New Delhi</span><dl><div><dt>LinkedIn followers</dt><dd>28K+</dd></div><div><dt>Founder workshops</dt><dd>50+</dd></div><div><dt>Trainfluence</dt><dd>2025 speaker</dd></div></dl></figcaption>
     </figure>
     <div>
       <div class="head" data-reveal>
       <p class="label">From the founder</p>
-      <h2 class="h2">I built this for myself first. <em>Then for founders like you.</em></h2>
+      <h2 class="h2 words"><span class="w"><span style="--w:0">I</span></span> <span class="w"><span style="--w:1">built</span></span> <span class="w"><span style="--w:2">this</span></span> <span class="w"><span style="--w:3">for</span></span> <span class="w"><span style="--w:4">myself</span></span> <span class="w"><span style="--w:5">first.</span></span> <em><span class="w"><span style="--w:6">Then</span></span> <span class="w"><span style="--w:7">for</span></span> <span class="w"><span style="--w:8">founders</span></span> <span class="w"><span style="--w:9">like</span></span> <span class="w"><span style="--w:10">you.</span></span></em></h2>
       
     </div>
       <div class="letter" data-reveal><p>I started at zero followers, where most founders I meet are today. I grew past 28,000 without spending a rupee on ads, ran more than 50 founder workshops, and kept closing deals myself.</p><p>Again and again I saw where the first year goes wrong. It is rarely a lack of effort. The brand, the posts, the outreach and the follow-up all sit with different people, and nobody connects them.</p><p>Kreatify is the team I wish I had at the start. I lead the strategy on every account, I check the work before it goes live, and you can reach me on WhatsApp.</p><p class="letter__sign">Krish</p></div>
@@ -232,7 +259,7 @@
   <div class="wrap faq">
     <div class="head" data-reveal>
       <p class="label">FAQ</p>
-      <h2 class="h2">Questions <em>founders ask.</em></h2>
+      <h2 class="h2 words"><span class="w"><span style="--w:0">Questions</span></span> <em><span class="w"><span style="--w:1">founders</span></span> <span class="w"><span style="--w:2">ask.</span></span></em></h2>
       
     </div>
     <div class="faq__list" data-reveal><details open><summary>Which service should I start with?<span class="plus" aria-hidden="true"></span></summary><p>It depends on where you are. Most founders start with personal branding or social media, then add GTM engineering once there is attention to convert. On the call we will tell you what makes sense.</p></details><details><summary>I haven&#x27;t registered my company yet. Is it too early?<span class="plus" aria-hidden="true"></span></summary><p>No. Our 0 to 1 brand building service starts there: company set-up with partner CAs, your name and identity, and a clear offer.</p></details><details><summary>What is GTM engineering, in plain words?<span class="plus" aria-hidden="true"></span></summary><p>It is the system that finds the people most likely to buy from you and starts conversations with them: lists, outreach, quick replies and a CRM, running every week.</p></details><details><summary>Will the content really sound like me?<span class="plus" aria-hidden="true"></span></summary><p>Yes. We start with a recorded conversation, write in your voice, and nothing goes live without your approval.</p></details><details><summary>Do you shoot content and work with creators?<span class="plus" aria-hidden="true"></span></summary><p>Yes. Our social media and influencer marketing services cover shoots, reels, creator briefs and on-ground events.</p></details><details><summary>How is pricing decided?<span class="plus" aria-hidden="true"></span></summary><p>It depends on what you need, so Krish walks you through it on the call once he understands your business.</p></details></div>
@@ -243,7 +270,7 @@
     <div>
       <div class="head" data-reveal>
       <p class="label">Next step</p>
-      <h2 class="h2">Talk it through <em>with Krish.</em></h2>
+      <h2 class="h2 words"><span class="w"><span style="--w:0">Talk</span></span> <span class="w"><span style="--w:1">it</span></span> <span class="w"><span style="--w:2">through</span></span> <em><span class="w"><span style="--w:3">with</span></span> <span class="w"><span style="--w:4">Krish.</span></span></em></h2>
       <p class="lead">A 30-minute call. We look at where your business is, where it is stuck, and the fastest way forward. You leave with a clear plan, whether or not we work together.</p>
     </div>
       <ul class="book__contact" data-reveal>
@@ -275,7 +302,7 @@
       <nav class="foot__col" aria-label="Services"><p class="label">Services</p><a href="personal-branding.html">Personal branding</a><a href="business-development.html">0 to 1 brand building</a><a href="gtm-engineering.html">GTM engineering</a><a href="social-media.html">Social media management</a><a href="influencer-marketing.html">Influencer marketing</a></nav>
       <div class="foot__col"><p class="label">Contact</p><a href="https://wa.me/918377916115">WhatsApp +91 83779 16115</a><a href="https://www.linkedin.com/in/meetkrishbhatia">LinkedIn in/meetkrishbhatia</a><a href="index.html#book">Book a call</a></div>
     </div>
-    <p class="foot__word" aria-hidden="true">Kreatify</p>
+    <p class="foot__word" aria-hidden="true" data-spot>Kreatify</p>
     <p class="foot__legal">© 2026 Kreatify</p>
   </div>
 </footer>

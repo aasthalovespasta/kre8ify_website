@@ -35,10 +35,29 @@ HERO = {
         {'icon': 'linkedin.svg', 'label': "Krish's LinkedIn", 'value': '0 to 28K+'},
         {'icon': 'gcal.svg', 'label': 'Meeting booked', 'value': 'Thu, 4:30 pm'},
     ],
+    'sticker': 'founder-led · zero to one · ',
+    'feed': [  # the live card under the photo cycles through these (logo file, title, detail)
+        ('linkedin.svg', 'Post published', 'Written in your voice'),
+        ('linkedin.svg', 'Profile viewed', 'Founder at Saffron Labs'),
+        ('whatsapp.svg', 'Reply in 40 seconds', 'Lead answered, CRM updated'),
+        ('gcal.svg', 'Meeting booked', 'Thursday, 4:30 pm'),
+        ('docs.svg', 'Client signed', 'Proposal accepted'),
+    ],
 }
 
+# Brands we have worked with. Logo files live in site/assets/clients/.
+# Leave the logo as None to show the name instead (until you have the logo file).
 CLIENTS_TITLE = 'Brands we have worked with'
-CLIENTS = ['Unacademy', 'Headfield', 'Roofs & Assets', 'Ganga Realty']
+CLIENTS = [
+    ('Unacademy', 'unacademy.svg'),
+    ('Experion Developers', 'experion.webp'),
+    ('Ganga Realty', 'ganga-realty.svg'),
+    ('Headfield', None),
+    ('Roofs & Assets', None),
+]
+
+# Big outlined words that slide sideways as you scroll, between sections
+BANDS = ['Personal branding · Social media · Influencers · GTM engineering · 0 to 1 · ']
 
 PROBLEM = {
     'label': 'The real problem',

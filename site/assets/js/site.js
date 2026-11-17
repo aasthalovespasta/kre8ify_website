@@ -67,6 +67,130 @@
     }, { threshold: 0.4 }).observe(flow);
   }
 
+  const finePointer = matchMedia('(pointer: fine)').matches;
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+
+  /* Scroll effects: each [data-scroll] element gets two CSS variables -------
+     --p   0 to 1 while the element travels through the screen
+     --out 0 to 1 as the element leaves through the top (used by the heroes)
+     Problem cards also get --q, which pulls them into place.               */
+  const scrollEls = $$('[data-scroll]');
+  if (scrollEls.length && !reduceMotion) {
+    const visible = new Set();
+    const vio = new IntersectionObserver((entries) => entries.forEach((e) => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target))));
+    scrollEls.forEach((el) => vio.observe(el));
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const vh = innerHeight;
+      visible.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const p = clamp((vh - r.top) / (vh + r.height));
+        el.style.setProperty('--p', p.toFixed(3));
+        el.style.setProperty('--out', clamp(-r.top / r.height).toFixed(3));
+        if (el.hasAttribute('data-assemble')) {
+          const q = clamp((p - 0.12) / 0.4);
+          el.style.setProperty('--q', q.toFixed(3));
+          el.classList.toggle('is-done', q > 0.98);
+        }
+      });
+    };
+    const request = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    addEventListener('scroll', request, { passive: true });
+    addEventListener('resize', request);
+    request();
+  } else {
+    $$('[data-assemble]').forEach((el) => el.classList.add('is-done'));
+  }
+
+  /* Hero stage: colour lens and tilt follow the cursor, cards float at depth -- */
+  const stage = $('[data-stage]');
+  if (stage) {
+    const hero = stage.closest('[data-hero]');
+    const lens = $('[data-lens]', stage), arch = $('[data-tilt]', stage), layers = $$('[data-depth]', stage);
+    const now = { lr: 0, lx: 50, ly: 30, rx: 0, ry: 0, dx: 0, dy: 0 };
+    const goal = { ...now };
+    let raf = 0, autoOrbit = !finePointer;
+    const frame = (t) => {
+      raf = 0;
+      if (autoOrbit) { const k = t / 1000; goal.lx = 50 + Math.cos(k * 0.7) * 22; goal.ly = 34 + Math.sin(k * 0.9) * 16; goal.lr = 140; }
+      let moving = autoOrbit;
+      for (const key in now) { now[key] += (goal[key] - now[key]) * 0.12; if (Math.abs(goal[key] - now[key]) > 0.05) moving = true; }
+      lens.style.setProperty('--lr', now.lr + 'px');
+      lens.style.setProperty('--lx', now.lx + '%');
+      lens.style.setProperty('--ly', now.ly + '%');
+      arch.style.setProperty('--rx', now.rx + 'deg');
+      arch.style.setProperty('--ry', now.ry + 'deg');
+      layers.forEach((el) => { const d = +el.dataset.depth; el.style.setProperty('--dx', now.dx * d + 'px'); el.style.setProperty('--dy', now.dy * d + 'px'); });
+      if (moving) raf = requestAnimationFrame(frame);
+    };
+    const kick = () => { if (!raf) raf = requestAnimationFrame(frame); };
+    if (reduceMotion) {
+      lens.style.setProperty('--lr', '2000px');
+    } else {
+      hero.addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        autoOrbit = false;
+        stage.classList.add('is-touched');
+        const r = lens.getBoundingClientRect(), h = hero.getBoundingClientRect();
+        goal.lx = ((e.clientX - r.left) / r.width) * 100;
+        goal.ly = ((e.clientY - r.top) / r.height) * 100;
+        const near = e.clientX > r.left - 60 && e.clientX < r.right + 60 && e.clientY > r.top - 60 && e.clientY < r.bottom + 60;
+        goal.lr = near ? 170 : 0;
+        const nx = (e.clientX - h.left) / h.width - 0.5, ny = (e.clientY - h.top) / h.height - 0.5;
+        goal.ry = nx * 12; goal.rx = -ny * 9; goal.dx = nx * -16; goal.dy = ny * -12;
+        kick();
+      });
+      hero.addEventListener('pointerleave', () => { goal.lr = 0; goal.rx = goal.ry = goal.dx = goal.dy = 0; kick(); });
+      lens.addEventListener('click', () => { goal.lr = goal.lr > 400 ? 170 : 900; kick(); });
+      if (autoOrbit) { stage.classList.add('is-touched'); kick(); }
+    }
+
+    /* the live card stack: a new moment every two seconds while visible */
+    const feed = $$('[data-feed] li', stage);
+    if (feed.length) {
+      let top = 0, timer = null;
+      const place = () => feed.forEach((li, i) => {
+        const pos = (top - i + feed.length) % feed.length;
+        li.dataset.pos = pos <= 2 ? pos : pos === feed.length - 1 ? 9 : -1;
+      });
+      place();
+      if (!reduceMotion) {
+        const tick = () => { top = (top + 1) % feed.length; place(); timer = setTimeout(tick, 2000); };
+        new IntersectionObserver(([e]) => {
+          if (e.isIntersecting && !timer) timer = setTimeout(tick, 1800);
+          if (!e.isIntersecting) { clearTimeout(timer); timer = null; }
+        }).observe(stage);
+      }
+    }
+  }
+
+  /* Cards: light follows the cursor, slight tilt, illustration parallax ---- */
+  if (finePointer && !reduceMotion) {
+    $$('[data-card]').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        card.style.setProperty('--mx', x * 100 + '%');
+        card.style.setProperty('--my', y * 100 + '%');
+        card.style.setProperty('--rx', (0.5 - y) * 4 + 'deg');
+        card.style.setProperty('--ry', (x - 0.5) * 5 + 'deg');
+        card.style.setProperty('--px', (x - 0.5) * 2);
+        card.style.setProperty('--py', (y - 0.5) * 2);
+      });
+      card.addEventListener('pointerleave', () => ['--rx', '--ry', '--px', '--py'].forEach((v) => card.style.removeProperty(v)));
+    });
+
+    /* buttons lean towards the cursor */
+    $$('.magnetic').forEach((b) => {
+      b.addEventListener('pointermove', (e) => { const r = b.getBoundingClientRect(); b.style.translate = `${(e.clientX - r.left - r.width / 2) * 0.18}px ${(e.clientY - r.top - r.height / 2) * 0.3}px`; });
+      b.addEventListener('pointerleave', () => { b.style.translate = ''; });
+    });
+
+    /* footer word lights up under the cursor */
+    const word = $('[data-spot]');
+    if (word) word.addEventListener('pointermove', (e) => { const r = word.getBoundingClientRect(); word.style.setProperty('--sx', e.clientX - r.left + 'px'); word.style.setProperty('--sy', e.clientY - r.top + 'px'); });
+  }
+
   /* Booking form: checks the fields, then opens WhatsApp with the answers --- */
   const form = $('[data-form]');
   if (form) {

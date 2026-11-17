@@ -4,7 +4,7 @@ Run:  python3 scripts/build_pages.py
 
 You normally only edit content.py. This file holds the HTML templates.
 """
-import html, os, sys
+import html, os, re, sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 from content import *  # noqa: E402,F403
@@ -32,6 +32,24 @@ ICONS = {
 
 def icon(name):
     return f'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">{ICONS[name]}</svg>'
+
+
+def words(text):
+    """Wrap each word of a heading so it can rise into view; keeps <em> tags intact."""
+    out, n = [], 0
+    for part in re.split(r'(<[^>]+>)', text):
+        if part.startswith('<'):
+            out.append(part)
+            continue
+        for w in re.split(r'(\s+)', part):
+            if not w:
+                continue
+            if w.isspace():
+                out.append(w)
+            else:
+                out.append(f'<span class="w"><span style="--w:{n}">{w}</span></span>')
+                n += 1
+    return ''.join(out)
 
 
 # ---------------------------------------------------------------- page frame
@@ -92,7 +110,7 @@ def footer():
       <nav class="foot__col" aria-label="Services"><p class="label">Services</p>{services}</nav>
       <div class="foot__col"><p class="label">Contact</p><a href="{wa()}">WhatsApp {SITE['whatsapp_label']}</a><a href="{SITE['linkedin']}">LinkedIn {SITE['linkedin_label']}</a><a href="{HOME}#book">Book a call</a></div>
     </div>
-    <p class="foot__word" aria-hidden="true">{SITE['name']}</p>
+    <p class="foot__word" aria-hidden="true" data-spot>{SITE['name']}</p>
     <p class="foot__legal">© {SITE['year']} {SITE['name']}</p>
   </div>
 </footer>
@@ -106,7 +124,7 @@ def section_head(label, title, lead='', center=False):
     lead_html = f'<p class="lead">{lead}</p>' if lead else ''
     return f'''<div class="head{' head--center' if center else ''}" data-reveal>
       <p class="label">{label}</p>
-      <h2 class="h2">{title}</h2>
+      <h2 class="h2 words">{words(title)}</h2>
       {lead_html}
     </div>'''
 
@@ -154,40 +172,82 @@ def art(kind):
 
 
 # ---------------------------------------------------------------- home page sections
+def client_tiles(hidden=False):
+    """One tile per client: the logo when we have it, otherwise the name."""
+    attr = ' aria-hidden="true"' if hidden else ''
+    tiles = []
+    for name, logo in CLIENTS:
+        inner = f'<img src="assets/clients/{logo}" alt="{"" if hidden else esc(name)}" loading="lazy">' if logo else f'<span>{esc(name)}</span>'
+        tiles.append(f'<li class="client"{attr}>{inner}</li>')
+    return ''.join(tiles)
+
+
 def hero():
-    chips = ''.join(f'<div class="hero__chip hero__chip--{i + 1}"><img src="assets/logos/{c["icon"]}" alt="" width="20" height="20"><span><small>{c["label"]}</small><b>{c["value"]}</b></span></div>' for i, c in enumerate(HERO['chips']))
-    clients = ''.join(f'<li>{esc(c)}</li>' for c in CLIENTS)
-    return f'''<section class="hero" id="top">
+    li, cal = HERO['chips']
+    feed = ''.join(f'<li><img src="assets/logos/{ic}" alt="" width="20" height="20"><span><b>{esc(t)}</b><small>{esc(s)}</small></span></li>' for ic, t, s in HERO['feed'])
+    loop = client_tiles() + client_tiles(hidden=True) + client_tiles(hidden=True)
+    return f'''<section class="hero" id="top" data-hero>
+  <div class="hero__bg" aria-hidden="true"><i class="orb orb--1"></i><i class="orb orb--2"></i><i class="orb orb--3"></i><span class="hero__dots"></span></div>
   <div class="wrap hero__grid">
-    <div class="hero__copy">
-      <p class="label label--light rise" style="--i:0">{HERO['eyebrow']}</p>
-      <h1 class="h1 rise" style="--i:1">{HERO['title']}</h1>
-      <p class="hero__lead rise" style="--i:2">{HERO['lead']}</p>
-      <div class="hero__ctas rise" style="--i:3">
-        <a class="btn btn--primary" href="#book">{HERO['cta']} {ARROW}</a>
+    <div class="hero__copy" data-scroll>
+      <p class="eyebrow rise" style="--i:0"><span class="pulse"></span>{HERO['eyebrow']}</p>
+      <h1 class="h1 words">{words(HERO['title'])}</h1>
+      <p class="hero__lead rise" style="--i:4">{HERO['lead']}</p>
+      <div class="hero__ctas rise" style="--i:5">
+        <a class="btn btn--primary magnetic" href="#book">{HERO['cta']} {ARROW}</a>
         <a class="btn btn--ghost" href="#services">{HERO['cta2']}</a>
       </div>
     </div>
-    <div class="hero__media rise" style="--i:2">
-      <div class="hero__photo"><img src="assets/img/krish-hero.webp" alt="{HERO['photo_alt']}" width="770" height="1013" fetchpriority="high"></div>
-      {chips}
+
+    <!-- founder stage: duotone photo that turns to colour under the cursor, floating proof cards -->
+    <div class="stage" data-stage>
+      <div class="stage__arch" data-tilt>
+        <div class="stage__photo" data-lens>
+          <img class="ph ph--duo" src="assets/img/krish-hero.webp" alt="" width="770" height="1013" fetchpriority="high">
+          <img class="ph ph--color" src="assets/img/krish-hero.webp" alt="{HERO['photo_alt']}" width="770" height="1013">
+          <span class="stage__hint" aria-hidden="true">Move here to see Krish in colour</span>
+        </div>
+        <p class="stage__name"><b>{SITE['founder']}</b><span>Founder, on every account</span></p>
+      </div>
+      <div class="float float--li" data-depth="1.6" aria-hidden="true">
+        <p class="float__h"><img src="assets/logos/{li['icon']}" alt="" width="18" height="18">{li['label']}</p>
+        <b>{li['value']}</b>
+        <svg viewBox="0 0 160 40" preserveAspectRatio="none"><path d="M0 38 C40 37 70 32 95 22 S140 4 160 2"/></svg>
+      </div>
+      <div class="float float--cal" data-depth="2.4" aria-hidden="true">
+        <p class="float__h"><img src="assets/logos/{cal['icon']}" alt="" width="18" height="18">{cal['label']}</p>
+        <b>{cal['value']}</b>
+      </div>
+      <div class="sticker" data-depth="3" aria-hidden="true">
+        <svg viewBox="0 0 120 120"><defs><path id="sticker-ring" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs><text><textPath href="#sticker-ring">{HERO['sticker'] * 2}</textPath></text></svg>
+        <b>0→1</b>
+      </div>
+      <ol class="feed" data-feed data-depth="1.1" aria-hidden="true">{feed}</ol>
     </div>
   </div>
-  <div class="wrap clients rise" style="--i:4">
+
+  <div class="logos rise" style="--i:6">
     <p class="label label--light">{CLIENTS_TITLE}</p>
-    <ul class="clients__list">{clients}</ul>
+    <div class="logos__track"><ul class="logos__row">{loop}</ul></div>
   </div>
 </section>
 '''
 
 
+def band(text):
+    """A row of big outlined words that slides sideways as you scroll."""
+    return f'<div class="band" aria-hidden="true" data-scroll><p data-band>{esc(text * 3)}</p></div>\n'
+
+
 def problem():
-    cards = ''.join(f'''<article class="pcard" style="--d:{i * 70}ms"><p class="pcard__tag">{i + 1:02d} · {esc(tag)}</p><h3>{esc(t)}</h3><p>{esc(p)}</p></article>'''
-                    for i, (tag, t, p) in enumerate(PROBLEM['cards']))
-    return f'''<section class="section section--paper" id="problem">
+    # where each card starts before scrolling pulls it into place: x px, y px, rotation deg
+    seeds = [(-70, 90, -9), (40, 150, 6), (90, 60, 11), (-40, -120, 7), (-70, -60, -12), (80, -140, -6)]
+    cards = ''.join(f'''<article class="pcard" style="--sx:{sx};--sy:{sy};--sr:{sr}"><p class="pcard__tag">{i + 1:02d} · {esc(tag)}</p><h3>{esc(t)}</h3><p>{esc(p)}</p></article>'''
+                    for i, ((tag, t, p), (sx, sy, sr)) in enumerate(zip(PROBLEM['cards'], seeds)))
+    return f'''<section class="section section--paper tex" id="problem">
   <div class="wrap">
     {section_head(PROBLEM['label'], PROBLEM['title'], PROBLEM['lead'])}
-    <div class="problem" data-inview>
+    <div class="problem" data-inview data-scroll data-assemble>
       {cards}
       <div class="problem__hub" aria-hidden="true"><span>{PROBLEM['hub']}</span></div>
     </div>
@@ -200,7 +260,7 @@ def services():
     cards = []
     for i, s in enumerate(SERVICES):
         items = ''.join(f'<li><span>{j + 1:02d}</span>{esc(x)}</li>' for j, x in enumerate(s['items']))
-        cards.append(f'''  <article class="svc" data-inview>
+        cards.append(f'''  <article class="svc" data-inview data-card>
     {art(s['art'])}
     <div class="svc__head"><h3 class="svc__title">{s['title']}</h3><span class="svc__num" aria-hidden="true">{i + 1:02d}</span></div>
     <p class="svc__desc">{s['desc']}</p>
@@ -212,7 +272,8 @@ def services():
     <p class="svc__desc">{SERVICES_CTA['text']}</p>
     <a class="btn btn--primary" href="#book">{SERVICES_CTA['button']} {ARROW}</a>
   </article>'''
-    return f'''<section class="section section--dark" id="services">
+    return f'''<section class="section section--dark tex-dark" id="services">
+  <div class="services__glow" aria-hidden="true"></div>
   <div class="wrap">
     {section_head(SERVICES_INTRO['label'], SERVICES_INTRO['title'], SERVICES_INTRO['lead'])}
     <div class="services">
@@ -229,22 +290,23 @@ def process():
     return f'''<section class="section section--white" id="process">
   <div class="wrap">
     {section_head(PROCESS['label'], PROCESS['title'])}
-    <ol class="process" data-inview>{steps}</ol>
+    <ol class="process" data-inview data-scroll>{steps}</ol>
   </div>
 </section>
 '''
 
 
 def work():
-    cards = ''.join(f'''<article class="case" data-reveal style="--d:{i * 80}ms">
+    cards = ''.join(f'''<article class="case" data-reveal data-card style="--d:{i * 80}ms">
       <p class="case__tag">{esc(tag)}</p>
       <b class="case__fig">{esc(fig)}</b><p class="case__figlabel">{esc(lab)}</p>
       <h3>{esc(client)}</h3><p class="case__text">{esc(text)}</p>
     </article>''' for i, (tag, client, fig, lab, text) in enumerate(WORK['cases']))
-    return f'''<section class="section section--dark" id="work">
+    return f'''<section class="section section--dark tex-dark" id="work">
   <div class="wrap">
     {section_head(WORK['label'], WORK['title'])}
     <div class="cases">{cards}</div>
+    <ul class="logo-wall" data-reveal>{client_tiles()}</ul>
   </div>
 </section>
 '''
@@ -253,12 +315,12 @@ def work():
 def testimonials():
     if not TESTIMONIALS['items']:
         return ''
-    cards = ''.join(f'''<figure class="quote" data-reveal style="--d:{i * 80}ms">
+    cards = ''.join(f'''<figure class="quote" data-reveal data-card style="--d:{i * 80}ms">
       {icon('quote')}
       <blockquote>{esc(t['quote'])}</blockquote>
       <figcaption><i>{esc(t['name'].strip('[')[:1])}</i><span><b>{esc(t['name'])}</b><small>{esc(t['role'])}</small></span></figcaption>
     </figure>''' for i, t in enumerate(TESTIMONIALS['items']))
-    return f'''<section class="section section--paper" id="testimonials">
+    return f'''<section class="section section--paper tex" id="testimonials">
   <div class="wrap">
     {section_head(TESTIMONIALS['label'], TESTIMONIALS['title'])}
     <div class="quotes">{cards}</div>
@@ -272,7 +334,7 @@ def founder():
     stats = ''.join(f'<div><dt>{esc(a)}</dt><dd>{esc(b)}</dd></div>' for a, b in FOUNDER['stats'])
     return f'''<section class="section section--white" id="founder">
   <div class="wrap founder">
-    <figure class="founder__photo" data-reveal>
+    <figure class="founder__photo" data-reveal data-scroll>
       <img src="assets/img/krish.webp" alt="{SITE['founder']}, founder of {SITE['name']}" width="929" height="1280" loading="lazy">
       <figcaption><b>{SITE['founder']}</b><span>Founder · {SITE['city']}</span><dl>{stats}</dl></figcaption>
     </figure>
@@ -325,22 +387,23 @@ def book():
 
 
 def home():
-    body = hero() + problem() + services() + process() + work() + testimonials() + founder() + faq(FAQ) + book()
+    body = hero() + problem() + band(BANDS[0]) + services() + process() + work() + testimonials() + founder() + faq(FAQ) + book()
     return (head(f"{SITE['name']}: we make founders impossible to ignore", HERO['lead'])
             + nav(HOME) + f'<main id="main">\n{body}</main>\n' + footer())
 
 
 # ---------------------------------------------------------------- service page sections
 def page_hero(p):
-    return f'''<section class="phero">
+    return f'''<section class="phero" data-hero>
+  <div class="hero__bg" aria-hidden="true"><i class="orb orb--1"></i><i class="orb orb--2"></i><i class="orb orb--3"></i><span class="hero__dots"></span></div>
   <div class="wrap phero__grid">
-    <div>
+    <div data-scroll>
       <p class="crumb rise" style="--i:0"><a href="{HOME}#services">Services</a> / {esc(p['title'])}</p>
-      <h1 class="h1 rise" style="--i:1">{p['h1']}</h1>
+      <h1 class="h1 words">{words(p['h1'])}</h1>
       <p class="hero__lead rise" style="--i:2">{p['lead']}</p>
       <div class="hero__ctas rise" style="--i:3"><a class="btn btn--primary" href="{HOME}#book">Book a call with Krish {ARROW}</a><a class="btn btn--ghost" href="#how">How it works</a></div>
     </div>
-    <div class="phero__art rise" style="--i:2" data-inview>{art(p['art'])}</div>
+    <div class="phero__art rise" style="--i:2" data-inview data-card>{art(p['art'])}</div>
   </div>
 </section>
 '''
