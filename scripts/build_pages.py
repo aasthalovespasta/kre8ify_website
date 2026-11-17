@@ -27,6 +27,10 @@ ICONS = {
     'search': '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
     'send': '<path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/>',
     'quote': '<path d="M7 7h4v4c0 3-1.5 5-4 6M15 7h4v4c0 3-1.5 5-4 6"/>',
+    'rocket': '<path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2M9 15l-3-3c1-4 4-8 10-9 0 6-4 9-8 10z"/><circle cx="15" cy="8" r="1.5"/>',
+    'target': '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+    'camera': '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8"/>',
+    'users': '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c2 .6 3.5 2.3 3.5 5.2"/>',
 }
 
 
@@ -77,22 +81,54 @@ def head(title, desc):
 '''
 
 
+SERVICE_ICONS = {'branding': 'user', 'launch': 'rocket', 'gtm': 'target', 'social': 'camera', 'creators': 'users'}
+
+
 def nav(current):
+    """Top bar: logo, Services (opens a panel), page links, WhatsApp and Book a call.
+    On phones the same links open in a full-screen menu."""
     pre = '' if current == HOME else HOME
-    links = [(pre + '#services', 'Services'), (pre + '#work', 'Work'), (pre + '#founder', 'Founder'), (pre + '#faq', 'FAQ')]
-    main = ''.join(f'<a href="{h}">{t}</a>' for h, t in links)
-    sheet_services = ''.join(f'<a class="sheet__sub" href="{s["page"]}">{s["title"]}</a>' for s in SERVICES)
+    links = [(pre + '#work', 'Our work', 'work'), (pre + '#founder', 'About Krish', 'founder'), (pre + '#faq', 'FAQ', 'faq')]
+    on_service = current != HOME
+    bar_links = ''.join(f'<a class="nav__link" href="{h}" data-section="{k}">{t}</a>' for h, t, k in links)
+
+    def service_items(cls):
+        return ''.join(f'''<li><a class="{cls}" href="{s['page']}"{' aria-current="page"' if s['page'] == current else ''}><span class="{cls}-icon">{icon(SERVICE_ICONS[s['art']])}</span><span><b>{s['title']}</b><small>{esc(s['desc'])}</small></span></a></li>''' for s in SERVICES)
+
+    chevron = '<svg class="nav__chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg>'
     return f'''<header class="nav" data-nav>
   <div class="wrap nav__bar">
     <a class="logo" href="{HOME}" aria-label="{SITE['name']} home">{SITE['name']}<i>.</i></a>
-    <nav class="nav__links" aria-label="Main">{main}</nav>
-    <a class="btn btn--primary btn--sm nav__cta" href="{pre}#book">Book a call {ARROW}</a>
-    <button class="nav__menu" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><span></span><span></span></button>
+    <nav class="nav__links" aria-label="Main">
+      <button class="nav__link nav__drop{' is-active' if on_service else ''}" type="button" aria-expanded="false" aria-controls="mega" data-mega-toggle>Services {chevron}</button>
+      {bar_links}
+    </nav>
+    <div class="nav__end">
+      <a class="nav__wa" href="{wa()}" aria-label="Message Krish on WhatsApp"><img src="assets/logos/whatsapp.svg" alt="" width="20" height="20"></a>
+      <a class="btn btn--primary btn--sm" href="{pre}#book">Book a call {ARROW}</a>
+    </div>
+    <button class="nav__menu" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Open menu" data-sheet-toggle><span></span><span></span></button>
   </div>
+
+  <!-- services panel (desktop) -->
+  <div class="mega" id="mega" hidden>
+    <div class="wrap mega__in">
+      <ul class="mega__list">{service_items('mega__item')}</ul>
+      <div class="mega__side">
+        <p class="label label--light">{SERVICES_CTA['title']}</p>
+        <p>{SERVICES_CTA['text']}</p>
+        <a class="btn btn--primary btn--sm" href="{pre}#book">{SERVICES_CTA['button']} {ARROW}</a>
+        <a class="mega__all" href="{pre}#services">See all services {ARROW}</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- full-screen menu (phones) -->
   <div class="sheet" id="sheet" hidden>
-    <p class="label">Services</p>{sheet_services}
-    {main}
-    <a class="btn btn--primary" href="{pre}#book">Book a call {ARROW}</a>
+    <p class="label label--light">Services</p>
+    <ul class="sheet__services">{service_items('sheet__item')}</ul>
+    <nav class="sheet__links" aria-label="Sections">{''.join(f'<a href="{h}">{t}</a>' for h, t, k in links)}</nav>
+    <div class="sheet__ctas"><a class="btn btn--primary" href="{pre}#book">Book a call {ARROW}</a><a class="btn btn--ghost" href="{wa()}">WhatsApp Krish</a></div>
   </div>
 </header>
 '''

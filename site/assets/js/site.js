@@ -5,23 +5,68 @@
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Nav: solid background after scrolling, mobile menu -------------------- */
+  /* Nav --------------------------------------------------------------------
+     - the bar gets a solid background once you scroll
+     - "Services" opens a panel (click, or hover with a mouse)
+     - on phones the menu button opens a full-screen menu
+     - the link for the section you are reading is highlighted            */
   const nav = $('[data-nav]');
+  const megaBtn = $('[data-mega-toggle]'), mega = $('#mega');
+  const menuBtn = $('[data-sheet-toggle]'), sheet = $('#sheet');
+  const finePointerNav = matchMedia('(pointer: fine)').matches;
+
+  const refreshBar = () => nav.classList.toggle('is-open', !mega.hidden || !sheet.hidden);
   const onScroll = () => nav.classList.toggle('is-scrolled', scrollY > 20);
   addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  const menuBtn = $('.nav__menu');
-  const sheet = $('#sheet');
-  const setMenu = (open) => {
+  let megaOpenedAt = 0;
+  const setMega = (open) => {
+    if (open && mega.hidden) megaOpenedAt = Date.now();
+    mega.hidden = !open;
+    megaBtn.setAttribute('aria-expanded', String(open));
+    refreshBar();
+  };
+  const setSheet = (open) => {
+    sheet.hidden = !open;
     menuBtn.setAttribute('aria-expanded', String(open));
     menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-    sheet.hidden = !open;
-    nav.classList.toggle('is-scrolled', open || scrollY > 20);
+    document.body.style.overflow = open ? 'hidden' : '';
+    refreshBar();
   };
-  menuBtn.addEventListener('click', () => setMenu(sheet.hidden));
-  $$('a', sheet).forEach((a) => a.addEventListener('click', () => setMenu(false)));
-  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !sheet.hidden) { setMenu(false); menuBtn.focus(); } });
+
+  // a click right after the hover opened the panel should keep it open, not close it
+  megaBtn.addEventListener('click', () => setMega(mega.hidden || Date.now() - megaOpenedAt < 500));
+  menuBtn.addEventListener('click', () => setSheet(sheet.hidden));
+  $$('a', mega).forEach((a) => a.addEventListener('click', () => setMega(false)));
+  $$('a', sheet).forEach((a) => a.addEventListener('click', () => setSheet(false)));
+  if (finePointerNav) {
+    let closeTimer;
+    const openSoon = () => { clearTimeout(closeTimer); setMega(true); };
+    const closeSoon = () => { clearTimeout(closeTimer); closeTimer = setTimeout(() => setMega(false), 220); };
+    megaBtn.addEventListener('pointerenter', openSoon);
+    mega.addEventListener('pointerenter', openSoon);
+    megaBtn.addEventListener('pointerleave', closeSoon);
+    mega.addEventListener('pointerleave', closeSoon);
+  }
+  document.addEventListener('click', (e) => { if (!mega.hidden && !e.target.closest('#mega, [data-mega-toggle]')) setMega(false); });
+  addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (!mega.hidden) { setMega(false); megaBtn.focus(); }
+    if (!sheet.hidden) { setSheet(false); menuBtn.focus(); }
+  });
+  addEventListener('resize', () => { if (innerWidth > 1080 && !sheet.hidden) setSheet(false); });
+
+  const sectionLinks = $$('.nav__link[data-section]').filter((a) => a.getAttribute('href').startsWith('#'));
+  if (sectionLinks.length) {
+    const watch = ['services', ...sectionLinks.map((a) => a.dataset.section)].map((id) => document.getElementById(id)).filter(Boolean);
+    const sectionIO = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      sectionLinks.forEach((a) => a.classList.toggle('is-active', a.dataset.section === e.target.id));
+      megaBtn.classList.toggle('is-active', e.target.id === 'services');
+    }), { rootMargin: '-45% 0px -50% 0px' });
+    watch.forEach((sec) => sectionIO.observe(sec));
+  }
 
   /* Reveal on scroll: adds .is-in once an element is on screen ------------- */
   const targets = $$('[data-reveal], [data-inview]');
