@@ -415,10 +415,17 @@ def work():
 def testimonials():
     if not TESTIMONIALS['items']:
         return ''
+    def person(t):
+        initials = ''.join(w[0] for w in t['name'].split()[:2]).upper()
+        name = esc(t['name'])
+        if t.get('linkedin'):
+            name = f'<a href="{t["linkedin"]}" target="_blank" rel="noopener">{name}<img src="assets/logos/linkedin.svg" alt="LinkedIn profile" width="16" height="16"></a>'
+        return f'<figcaption><i>{initials}</i><span><b>{name}</b><small>{esc(t["role"])}</small></span></figcaption>'
+
     cards = ''.join(f'''<figure class="quote" data-reveal data-card style="--d:{i * 80}ms">
-      {icon('quote')}
+      <div class="quote__top">{icon('quote')}{f'<span class="quote__tag">{esc(t["tag"])}</span>' if t.get('tag') else ''}</div>
       <blockquote>{esc(t['quote'])}</blockquote>
-      <figcaption><i>{esc(t['name'].strip('[')[:1])}</i><span><b>{esc(t['name'])}</b><small>{esc(t['role'])}</small></span></figcaption>
+      {person(t)}
     </figure>''' for i, t in enumerate(TESTIMONIALS['items']))
     return f'''<section class="section section--paper tex" id="testimonials">
   <div class="wrap">

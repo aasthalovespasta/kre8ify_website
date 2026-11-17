@@ -624,6 +624,15 @@ body { overflow-x: clip; }
 .services--3 { grid-template-columns: repeat(3, 1fr); }
 .services--3 .art--gtm .chip { display: none; }
 
+/* testimonial details: service tag, LinkedIn link on the name */
+.quote__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.quote__tag { padding: 5px 12px; border-radius: 99px; background: var(--sky-light); color: var(--royal); font-size: 12.5px; font-weight: 600; text-align: right; }
+.quote blockquote { font-size: 18.5px; }
+.quote figcaption a { display: inline-flex; align-items: center; gap: 6px; }
+.quote figcaption a:hover { color: var(--royal); text-decoration: underline; text-underline-offset: 3px; }
+.quote figcaption img { width: 16px; height: 16px; }
+.quote figcaption i { font-size: 14px; }
+
 @media (max-width: 1080px) {
   .pillar__head { grid-template-columns: 1fr; gap: 32px; }
   .tiles, .plan, .jumps, .services--3 { grid-template-columns: 1fr 1fr; }

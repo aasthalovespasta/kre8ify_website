@@ -50,8 +50,10 @@ HERO = {
 CLIENTS_TITLE = 'Brands we have worked with'
 CLIENTS = [
     ('Unacademy', 'unacademy.svg'),
+    ('Skilldify', 'skilldify.png'),
     ('Experion Developers', 'experion.webp'),
     ('Ganga Realty', 'ganga-realty.svg'),
+    ('Sakhi & Beyond', None),
     ('Headfield', None),
     ('Roofs & Assets', None),
 ]
@@ -203,14 +205,31 @@ WORK = {
     ],
 }
 
-# Replace these with real client words. Leave the list empty  [ ]  to hide the section.
+# Client words. Get each person's OK on their quote before the site goes live.
+# 'tag' is the service shown on the card; 'linkedin' links their name to their profile.
+# Leave the list empty  [ ]  to hide the section.
 TESTIMONIALS = {
     'label': 'Testimonials',
     'title': 'What clients <em>say.</em>',
     'items': [
-        {'quote': "[Client's words go here. Two or three sentences about what changed for them work best.]", 'name': '[Client name]', 'role': '[Role, Company]'},
-        {'quote': "[Client's words go here. A specific result, like more enquiries or a busier calendar, reads well.]", 'name': '[Client name]', 'role': '[Role, Company]'},
-        {'quote': "[Client's words go here. What it was like to work with Krish and the team.]", 'name': '[Client name]', 'role': '[Role, Company]'},
+        {
+            'quote': "I had been posting on LinkedIn on and off for years and nothing much came of it. Krish's team has handled my content and outreach for over six months now, and the big change is that people reach out to me first. The posts still sound like me, which mattered a lot to me, and I always know what is going out and why.",
+            'name': 'Debajit Roy', 'role': 'Corporate trainer and leadership coach',
+            'tag': 'Personal branding and outbound',
+            'linkedin': 'https://www.linkedin.com/in/debajitroycorporatetrainerleadershipcoach/',
+        },
+        {
+            'quote': "Krish was there while we were building Skilldify. He planned our go-to-market from the ground up: who we sell to, how we reach them, what we say. Then he grew our social media alongside it. He works like it is his own company, and I never had to chase him for an update.",
+            'name': 'Shivangi Narula', 'role': 'Founder, Skilldify',
+            'tag': 'GTM and social media',
+            'linkedin': 'https://www.linkedin.com/in/shivanginarula/',
+        },
+        {
+            'quote': "I came in with Sakhi & Beyond as an idea and a LinkedIn profile I hardly used. Kreatify is helping me with both at the same time: getting the brand ready to launch, and making sure people know who is behind it. Krish is very hands-on, and honest about what will work and what will not.",
+            'name': 'Ria Bhide', 'role': 'Founder, Sakhi & Beyond',
+            'tag': 'Personal branding and startup 0 to 1',
+            'linkedin': 'https://www.linkedin.com/in/ria-bhide/',
+        },
     ],
 }
 
