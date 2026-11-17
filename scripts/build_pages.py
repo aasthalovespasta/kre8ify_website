@@ -205,7 +205,7 @@ def services():
     <div class="svc__head"><h3 class="svc__title">{s['title']}</h3><span class="svc__num" aria-hidden="true">{i + 1:02d}</span></div>
     <p class="svc__desc">{s['desc']}</p>
     <ul class="svc__list">{items}</ul>
-    <a class="svc__link" href="{s['page']}">Explore {s['title'].lower()} {ARROW}</a>
+    <a class="svc__link" href="{s['page']}" aria-label="How {s['title']} works">How it works {ARROW}</a>
   </article>''')
     cta = f'''  <article class="svc svc--cta" data-inview>
     <h3 class="svc__title">{SERVICES_CTA['title']}</h3>
