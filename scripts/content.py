@@ -25,9 +25,9 @@ SITE = {
 
 # ------------------------------------------------------------------ home page
 HERO = {
-    'eyebrow': 'Founder-led growth studio · New Delhi',
-    'title': 'We make founders <em>impossible to ignore.</em>',
-    'lead': "We help early-stage startups build the founder's brand, run their content and social media, and turn that attention into clients.",
+    'eyebrow': 'Personal branding · Startups · Social media',
+    'title': 'We make people and startups <em>impossible to ignore.</em>',
+    'lead': 'We build personal brands on LinkedIn, take startups from 0 to 1, and run Instagram and social media that turns attention into customers.',
     'cta': 'Book a call with Krish',
     'cta2': 'See our services',
     'photo_alt': 'Krish Bhatia, founder of Kreatify',
@@ -35,7 +35,7 @@ HERO = {
         {'icon': 'linkedin.svg', 'label': "Krish's LinkedIn", 'value': '0 to 28K+'},
         {'icon': 'gcal.svg', 'label': 'Meeting booked', 'value': 'Thu, 4:30 pm'},
     ],
-    'sticker': 'founder-led · zero to one · ',
+    'sticker': 'brands · startups · zero to one · ',
     'feed': [  # the live card under the photo cycles through these (logo file, title, detail)
         ('linkedin.svg', 'Post published', 'Written in your voice'),
         ('linkedin.svg', 'Profile viewed', 'Founder at Saffron Labs'),
@@ -57,7 +57,7 @@ CLIENTS = [
 ]
 
 # Big outlined words that slide sideways as you scroll, between sections
-BANDS = ['Personal branding · Social media · Influencers · GTM engineering · 0 to 1 · ']
+BANDS = ['Personal branding · Startups 0 to 1 · Social media · Influencers · GTM · ']
 
 PROBLEM = {
     'label': 'The real problem',
@@ -75,36 +75,37 @@ PROBLEM = {
 }
 
 SERVICES_INTRO = {
-    'label': 'Services',
-    'title': 'What we do <em>for founders.</em>',
-    'lead': 'Five services that work on their own or together. Start with the one that matters most right now.',
+    'label': 'What we do',
+    'title': 'Three ways <em>we grow you.</em>',
+    'lead': 'For professionals who want to be known, and for startups going from an idea to real customers. Pick one, or combine them.',
 }
 
 # 'art' picks the small animated illustration for each card: branding, launch, gtm, social, creators
+# The first three are the main services; the last two are add-ons.
 SERVICES = [
     {
         'page': 'personal-branding.html', 'art': 'branding',
         'title': 'Personal branding',
-        'desc': 'We turn the founder into the face buyers trust, on LinkedIn, in their own voice.',
+        'desc': 'LinkedIn that makes you known and brings you clients, for professionals, consultants, coaches and founders.',
         'items': ['Profile rewrite', 'Voice interview', '12 posts a month', 'Carousels and visuals', 'Daily engagement', 'Warm conversations'],
     },
     {
         'page': 'business-development.html', 'art': 'launch',
-        'title': '0 to 1 brand building',
-        'desc': 'From an idea to a registered brand with a clear offer and its first clients.',
-        'items': ['Company set-up with CAs', 'Name and identity', 'Offer and pitch', 'First client pipeline', 'Contracts and onboarding', 'Weekly routine'],
-    },
-    {
-        'page': 'gtm-engineering.html', 'art': 'gtm',
-        'title': 'GTM engineering',
-        'desc': 'The system that finds your buyers, starts conversations and books meetings on your calendar.',
-        'items': ['Ideal buyer list', 'Buying signals', 'Email and LinkedIn outreach', 'Fast AI replies', 'CRM set-up', 'Weekly report'],
+        'title': 'Startup 0 to 1',
+        'desc': 'We take startups from an idea to a launched brand with its first customers.',
+        'items': ['Company set-up with CAs', 'Name and identity', 'Offer and pitch', 'Instagram launch', 'First customers', 'Weekly check-ins'],
     },
     {
         'page': 'social-media.html', 'art': 'social',
         'title': 'Social media management',
         'desc': 'We start and run your Instagram and other channels, from the first post to a feed people follow.',
         'items': ['Profile set-up', 'Content calendar', 'Reels and carousels', 'Shoots and editing', 'Posting and replies', 'Monthly report'],
+    },
+    {
+        'page': 'gtm-engineering.html', 'art': 'gtm',
+        'title': 'GTM engineering',
+        'desc': 'The system that finds your buyers, starts conversations and books meetings on your calendar.',
+        'items': ['Ideal buyer list', 'Buying signals', 'Email and LinkedIn outreach', 'Fast AI replies', 'CRM set-up', 'Weekly report'],
     },
     {
         'page': 'influencer-marketing.html', 'art': 'creators',
@@ -115,9 +116,69 @@ SERVICES = [
 ]
 SERVICES_CTA = {
     'title': 'Not sure where to start?',
-    'text': 'Tell Krish where your business is today. He will tell you honestly which service would help most, if any.',
+    'text': 'Tell Krish where you are today. He will tell you honestly which service would help most, if any.',
     'button': 'Book a 30-minute call',
 }
+
+# The three main services, listed in full on the home page and on their own pages.
+#   tiles:  what we do      (icon, title, one line)   icons: compass pen news chat userplus calendar
+#                                                             building palette pitch rocket people check
+#                                                             camera reel clapper reply chart user
+#   plan:   every month     (number, how often, what)   the last one is highlighted
+#   built:  who it is for
+PILLARS = [
+    {
+        'id': 'branding', 'page': 'personal-branding.html', 'art': 'branding',
+        'label': 'Personal branding',
+        'title': 'LinkedIn that <em>brings you clients.</em>',
+        'lead': 'We plan your content, write your posts in your voice, start real conversations and reach out to the right people. You get seen, get calls and get clients.',
+        'tiles': [
+            ('compass', 'Content strategy', 'What you post, who it is for and why it matters.'),
+            ('pen', 'Posts in your voice', 'Written from your stories and published for you.'),
+            ('news', 'Newsletter and articles', 'Your LinkedIn newsletter, launched and written.'),
+            ('chat', 'Comments that start conversations', 'Every day, on the posts your buyers read.'),
+            ('userplus', 'Connections and outreach', 'The right decision-makers, added and messaged.'),
+            ('calendar', 'Calls and clients', 'Good conversations turned into booked calls.'),
+        ],
+        'plan': [('12', 'every month', 'LinkedIn posts'), ('20', 'every day', 'Meaningful comments'), ('10', 'every day', 'New connection requests'),
+                 ('10', 'every day', 'Outreach messages'), ('1', 'set up for you', 'Newsletter and profile rewrite'), ('Weekly', 'report', 'Reach, followers and leads')],
+        'built': ['Founders', 'Consultants', 'Coaches', 'Trainers', 'Doctors and lawyers', 'Corporate professionals', 'Freelancers', 'Business owners'],
+    },
+    {
+        'id': 'startups', 'page': 'business-development.html', 'art': 'launch',
+        'label': 'Startup 0 to 1',
+        'title': 'From an idea <em>to real customers.</em>',
+        'lead': 'We take startups from zero to one: the company, the brand, the offer, the Instagram launch and the first customers, done in the right order.',
+        'tiles': [
+            ('building', 'Company set-up', 'Registration, GST and paperwork with partner CAs.'),
+            ('palette', 'Brand identity', 'Name, logo, colours and templates that look right everywhere.'),
+            ('pitch', 'Offer and pitch', 'What you sell, explained in one clear sentence.'),
+            ('rocket', 'Instagram launch', 'Profile, first posts and a launch plan people notice.'),
+            ('people', 'First customers', 'A target list, warm outreach and help on sales calls.'),
+            ('check', 'Simple systems', 'Contracts, onboarding, a CRM and a weekly routine.'),
+        ],
+        'plan': [('2', 'weeks', 'To register and get GST ready'), ('1', 'brand kit', 'Name, logo and templates'), ('1', 'clear offer', 'Plus a 60-second pitch'),
+                 ('100', 'target customers', 'Researched and listed'), ('Weekly', 'check-in call', 'With Krish'), ('12', 'weeks', 'From idea to first customers')],
+        'built': ['Pre-launch startups', 'D2C brands', 'Service businesses', 'Cafes and restaurants', 'Real estate brands', 'Clinics and studios', 'Local businesses', 'First-time founders'],
+    },
+    {
+        'id': 'social', 'page': 'social-media.html', 'art': 'social',
+        'label': 'Social media management',
+        'title': 'An Instagram <em>people follow.</em>',
+        'lead': 'We start and run your Instagram and other channels: profile, content plan, shoots, reels, posting and replies, so your brand shows up every week.',
+        'tiles': [
+            ('user', 'Profile set-up', 'Handle, bio, highlights and a look that fits your brand.'),
+            ('calendar', 'Content calendar', 'A month planned ahead and approved by you.'),
+            ('reel', 'Reels and carousels', 'Scripted, designed and edited to be watched.'),
+            ('clapper', 'Shoots and editing', 'With you, your team or around your product.'),
+            ('reply', 'Posting and replies', 'Scheduled posts, plus replies to comments and DMs.'),
+            ('chart', 'Monthly report', 'Reach, followers and enquiries, and what is next.'),
+        ],
+        'plan': [('16', 'every month', 'Posts and reels'), ('20', 'every month', 'Stories'), ('1', 'every month', 'Shoot day'),
+                 ('24 hrs', 'or less', 'Reply to comments and DMs'), ('1', 'every month', 'Content calendar'), ('Monthly', 'report', 'Reach and enquiries')],
+        'built': ['Startups', 'D2C brands', 'Cafes and restaurants', 'Real estate', 'Clinics and salons', 'Coaches and creators', 'Events', 'Local businesses'],
+    },
+]
 
 PROCESS = {
     'label': 'How we work',
@@ -155,19 +216,20 @@ TESTIMONIALS = {
 
 FOUNDER = {
     'label': 'From the founder',
-    'title': 'I built this for myself first. <em>Then for founders like you.</em>',
+    'title': 'I built this for myself first. <em>Then for people and startups like you.</em>',
     'letter': [
-        'I started at zero followers, where most founders I meet are today. I grew past 28,000 without spending a rupee on ads, ran more than 50 founder workshops, and kept closing deals myself.',
-        'Again and again I saw where the first year goes wrong. It is rarely a lack of effort. The brand, the posts, the outreach and the follow-up all sit with different people, and nobody connects them.',
+        'I started at zero followers, where most people I meet are today. I grew past 28,000 without spending a rupee on ads, ran more than 50 workshops on growth, and kept closing deals myself.',
+        'Again and again I saw the same thing, with professionals and with new startups. It is rarely a lack of effort. The brand, the posts, the social media and the follow-up all sit with different people, and nobody connects them.',
         'Kreatify is the team I wish I had at the start. I lead the strategy on every account, I check the work before it goes live, and you can reach me on WhatsApp.',
     ],
     'sign': 'Krish',
-    'stats': [('LinkedIn followers', '28K+'), ('Founder workshops', '50+'), ('Trainfluence', '2025 speaker')],
+    'stats': [('LinkedIn followers', '28K+'), ('Workshops run', '50+'), ('Trainfluence', '2025 speaker')],
 }
 
 FAQ = [
-    ("Which service should I start with?", "It depends on where you are. Most founders start with personal branding or social media, then add GTM engineering once there is attention to convert. On the call we will tell you what makes sense."),
-    ("I haven't registered my company yet. Is it too early?", "No. Our 0 to 1 brand building service starts there: company set-up with partner CAs, your name and identity, and a clear offer."),
+    ("Which service should I start with?", "If you want to be known as a professional, start with personal branding. If you are launching a startup, start with Startup 0 to 1. If your brand needs to show up on Instagram, start with social media. On the call we will tell you what makes sense."),
+    ("Do you only work with founders?", "No. We build personal brands for consultants, coaches, trainers, doctors, corporate professionals and founders, and we take startups and small businesses from 0 to 1."),
+    ("I haven't registered my company yet. Is it too early?", "No. Startup 0 to 1 starts there: company set-up with partner CAs, your name and identity, a clear offer and your Instagram launch."),
     ("What is GTM engineering, in plain words?", "It is the system that finds the people most likely to buy from you and starts conversations with them: lists, outreach, quick replies and a CRM, running every week."),
     ("Will the content really sound like me?", "Yes. We start with a recorded conversation, write in your voice, and nothing goes live without your approval."),
     ("Do you shoot content and work with creators?", "Yes. Our social media and influencer marketing services cover shoots, reels, creator briefs and on-ground events."),
@@ -206,14 +268,14 @@ FLOW = [  # one lead travelling through the GTM system
 # Each page: hero, who it is for, steps, what you get, numbers, questions.
 PAGES = {
     'personal-branding.html': {
-        'title': 'Personal branding for founders', 'art': 'branding',
-        'desc': 'We help founders get known on LinkedIn with posts in their own voice, a profile that sells, and daily engagement with the buyers they want.',
+        'title': 'Personal branding', 'art': 'branding', 'pillar': 'branding',
+        'desc': 'LinkedIn personal branding for professionals, consultants, coaches and founders: posts in your voice, daily engagement and outreach that brings you clients.',
         'h1': 'Be the name <em>they remember.</em>',
-        'lead': 'Buyers trust people before they trust companies. We help you show up on LinkedIn every week with posts that sound like you and bring the right people to your profile.',
-        'who_title': 'Built for founders <em>who sell on trust.</em>',
+        'lead': 'People trust people before they trust companies. We help you show up on LinkedIn every week with posts that sound like you, and turn that attention into calls and clients.',
+        'who_title': 'For anyone <em>who sells on trust.</em>',
         'who': [('user', 'Experts with no audience', 'You are good at what you do, but outside your network nobody knows it yet.'),
-                ('case', 'Founders who sell services', 'Your buyers want to trust you before the first call. Content does that work in advance.'),
-                ('clock', 'Founders with no time to write', 'One conversation a month turns into a month of posts.')],
+                ('case', 'Consultants, coaches and founders', 'Your clients want to trust you before the first call. Content does that work in advance.'),
+                ('clock', 'Busy professionals', 'One conversation a month turns into a month of posts.')],
         'steps_title': 'From one conversation <em>to a steady presence.</em>',
         'steps_lead': 'About 90 minutes a month with us, plus a few minutes approving posts. We handle the rest.',
         'steps': [('A 90-minute conversation', 'We record a relaxed call about your work, your clients and your opinions.', 'Week 1'),
@@ -231,11 +293,11 @@ PAGES = {
                 ('Is it only LinkedIn?', 'LinkedIn is where most B2B buyers are, so we start there. Posts can be adapted for Instagram or X.')],
     },
     'business-development.html': {
-        'title': '0 to 1 brand building', 'art': 'launch',
-        'desc': 'We help first-time founders take a brand from idea to business: company set-up, name and identity, a clear offer and first clients.',
-        'h1': 'From idea <em>to brand.</em>',
-        'lead': 'Starting a brand comes with a long list of things nobody explains. We take you through it in the right order, from registration to your first clients, with Krish beside you.',
-        'who_title': 'For founders <em>at the very start.</em>',
+        'title': 'Startup 0 to 1', 'art': 'launch', 'pillar': 'startups',
+        'desc': 'We take startups from an idea to a launched brand: company set-up, name and identity, a clear offer, an Instagram launch and first customers.',
+        'h1': 'From an idea <em>to real customers.</em>',
+        'lead': 'Starting up comes with a long list of things nobody explains. We take you through it in the right order, from registration and brand to your Instagram launch and first customers.',
+        'who_title': 'For startups <em>at the very start.</em>',
         'who': [('user', 'You have an idea and no company yet', 'You want to start properly, without guessing which form comes first.'),
                 ('case', 'You registered, but have no clients', 'The company exists on paper. Now it needs a brand, an offer and buyers.'),
                 ('clock', 'You have a few clients and no system', 'Work comes from luck and referrals. You want something you can repeat.')],
@@ -255,7 +317,7 @@ PAGES = {
                 ('How involved is Krish?', 'Krish leads the strategy and joins the key calls. You can reach him on WhatsApp throughout.')],
     },
     'gtm-engineering.html': {
-        'title': 'GTM engineering for founders', 'art': 'gtm', 'tools': True,
+        'title': 'GTM engineering', 'art': 'gtm', 'tools': True,
         'desc': 'GTM engineering is the system behind your sales conversations. We find the companies most likely to buy, reach them at the right moment and put meetings on your calendar.',
         'h1': 'More meetings, <em>less chasing.</em>',
         'lead': 'GTM means go-to-market: how you find buyers and start conversations. We build that system for you and run it every week. Every tool sits on your own accounts.',
@@ -280,7 +342,7 @@ PAGES = {
                 ('How soon do meetings start?', 'Usually between weeks five and eight, once sending is warmed up and outreach is live.')],
     },
     'social-media.html': {
-        'title': 'Social media management', 'art': 'social',
+        'title': 'Social media management', 'art': 'social', 'pillar': 'social',
         'desc': 'We start and run your Instagram and other social channels: profile, content plan, shoots, reels, posting and replies.',
         'h1': 'A feed people <em>actually follow.</em>',
         'lead': 'We set up and run your Instagram and other channels: profile, content plan, shoots, reels, posting and replies. Your social presence keeps working while you run the business.',

@@ -563,3 +563,77 @@ body { overflow-x: clip; }
   .problem[data-assemble] .pcard { transform: none; opacity: 1; }
   .js [data-reveal] .words .w > span { transform: none; }
 }
+
+/* =====================================================================
+   17. Services listed in full: jump cards, service headers, tiles,
+       the monthly plan and "built for" chips (light and dark versions)
+   ===================================================================== */
+.section--white .btn--ghost, .section--paper .btn--ghost { color: var(--midnight); box-shadow: inset 0 0 0 1.5px var(--line-light); }
+.section--white .btn--ghost:hover, .section--paper .btn--ghost:hover { box-shadow: inset 0 0 0 1.5px var(--royal); }
+
+/* three cards that jump to each service */
+.jumps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.jump { display: flex; flex-direction: column; gap: 6px; min-height: 280px; padding: 28px; border-radius: 26px; background: var(--navy-deep); border: 1px solid var(--line-dark); transition: border-color .3s; }
+.jump:hover { border-color: rgb(110 172 218 / .5); }
+.jump__icon { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 18px; border-radius: 16px; background: linear-gradient(160deg, var(--royal), var(--navy)); color: var(--cream); box-shadow: inset 0 0 0 1px rgb(110 172 218 / .3); }
+.jump small { font-size: 13px; color: var(--sky); font-weight: 600; letter-spacing: .1em; }
+.jump b { font: 400 30px/1.1 var(--serif); letter-spacing: -.02em; }
+.jump__desc { color: var(--mist); }
+.jump__more { margin-top: auto; padding-top: 18px; font-size: 15px; font-weight: 600; color: var(--cream); }
+.jump:nth-child(2) { background: linear-gradient(160deg, var(--royal), var(--navy)); }
+
+/* one full section per service */
+.pillar__head { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; margin-bottom: 72px; }
+.pillar__head .h2 { margin-top: 14px; }
+.pillar__art .art { height: 320px; }
+.pillar__art { border-radius: 22px; }
+.pillar__sub { margin: 0 0 18px; }
+.tiles + .pillar__sub { margin-top: 56px; }
+
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.tile { padding: 24px; border-radius: 22px; background: var(--white); box-shadow: inset 0 0 0 1px var(--line-light), 0 20px 40px -32px rgb(3 52 110 / .45); transition: transform .4s var(--ease), box-shadow .4s; }
+.tile:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgb(3 52 110 / .25), 0 26px 50px -30px rgb(3 52 110 / .55); }
+.tile__icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 13px; background: var(--royal); color: var(--white); }
+.tile h3 { margin-top: 18px; font-size: 19px; letter-spacing: -.02em; }
+.tile p { margin-top: 6px; font-size: 15px; color: var(--ink-soft); }
+.section--dark .tile { background: rgb(10 39 68 / .55); box-shadow: inset 0 0 0 1px var(--line-dark); }
+.section--dark .tile:hover { box-shadow: inset 0 0 0 1px rgb(110 172 218 / .45); }
+.section--dark .tile__icon { background: linear-gradient(160deg, var(--sky), var(--royal)); }
+.section--dark .tile p { color: var(--mist); }
+
+/* the monthly plan: big numbers, how often, what */
+.plan { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.plan__item { display: grid; padding: 22px 24px; border-radius: 22px; background: var(--white); box-shadow: inset 0 0 0 1px var(--line-light); }
+.plan__item b { font: 400 44px/1 var(--serif); color: var(--royal); letter-spacing: -.02em; }
+.plan__item small { margin-top: 10px; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+.plan__item span { margin-top: 4px; font-size: 16.5px; font-weight: 600; }
+.section--dark .plan__item { background: rgb(10 39 68 / .55); box-shadow: inset 0 0 0 1px var(--line-dark); }
+.section--dark .plan__item b { color: var(--sky); }
+.section--dark .plan__item small { color: var(--mist); }
+.plan__item--hi, .section--dark .plan__item--hi { background: linear-gradient(160deg, var(--royal), #0d4a94); color: var(--white); box-shadow: 0 24px 50px -24px rgb(3 52 110 / .8); }
+.plan__item--hi b, .section--dark .plan__item--hi b { color: var(--cream); }
+.plan__item--hi small, .section--dark .plan__item--hi small { color: var(--sky-light); }
+
+/* who it is for */
+.built { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 48px; padding: 24px 28px; border-radius: 22px; background: rgb(3 52 110 / .05); box-shadow: inset 0 0 0 1px var(--line-light); }
+.built__list { display: flex; flex-wrap: wrap; gap: 8px; }
+.built__list li { padding: 8px 14px; border-radius: 99px; background: var(--white); box-shadow: inset 0 0 0 1px var(--line-light); font-size: 14.5px; font-weight: 600; }
+.section--dark .built { background: rgb(110 172 218 / .06); box-shadow: inset 0 0 0 1px var(--line-dark); }
+.section--dark .built__list li { background: rgb(10 39 68 / .7); box-shadow: inset 0 0 0 1px var(--line-dark); color: var(--white); }
+
+.services--3 { grid-template-columns: repeat(3, 1fr); }
+.services--3 .art--gtm .chip { display: none; }
+
+@media (max-width: 1080px) {
+  .pillar__head { grid-template-columns: 1fr; gap: 32px; }
+  .tiles, .plan, .jumps, .services--3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .tiles, .jumps, .services--3 { grid-template-columns: 1fr; }
+  .plan { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .plan__item { padding: 18px; } .plan__item b { font-size: 34px; } .plan__item span { font-size: 15px; }
+  .pillar__head { margin-bottom: 48px; }
+  .pillar__art .art { height: 260px; }
+  .jump { min-height: 0; }
+  .built { padding: 20px; }
+}

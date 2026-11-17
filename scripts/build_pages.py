@@ -31,6 +31,21 @@ ICONS = {
     'target': '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
     'camera': '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8"/>',
     'users': '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c2 .6 3.5 2.3 3.5 5.2"/>',
+    'compass': '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+    'pen': '<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
+    'news': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/>',
+    'chat': '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12z"/>',
+    'userplus': '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5M19 8v6M16 11h6"/>',
+    'calendar': '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+    'building': '<path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M16 9h2a2 2 0 0 1 2 2v10M2 21h20M8 7h4M8 11h4M8 15h4"/>',
+    'palette': '<path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 2-2s-1-1.5-1-2.5 1-1.5 2-1.5h2a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/>',
+    'pitch': '<path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1zM16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/>',
+    'people': '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c2 .6 3.5 2.3 3.5 5.2"/>',
+    'check': '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="m8 12 3 3 5-6"/>',
+    'reel': '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M3 8h18M8 3l3 5M14 3l3 5M10 12v5l4-2.5z"/>',
+    'clapper': '<path d="M4 9h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM4 9l-1-4 15-3 1 4"/><path d="m8 4 2 4M13 3l2 4"/>',
+    'reply': '<path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v3"/>',
+    'chart': '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/>',
 }
 
 
@@ -292,13 +307,63 @@ def problem():
 '''
 
 
+def pillar_body(p):
+    """What we do tiles, the monthly plan and who it is for. Used on the home page and on service pages."""
+    tiles = ''.join(f'<li class="tile" data-reveal style="--d:{i * 60}ms"><span class="tile__icon">{icon(ic)}</span><h3>{esc(t)}</h3><p>{esc(d)}</p></li>' for i, (ic, t, d) in enumerate(p['tiles']))
+    plan = ''.join(f'<li class="plan__item{" plan__item--hi" if i == len(p["plan"]) - 1 else ""}" data-reveal style="--d:{i * 60}ms"><b>{esc(n)}</b><small>{esc(f)}</small><span>{esc(w)}</span></li>' for i, (n, f, w) in enumerate(p['plan']))
+    chips = ''.join(f'<li>{esc(c)}</li>' for c in p['built'])
+    return f'''<p class="label pillar__sub">What we do</p>
+    <ul class="tiles">{tiles}</ul>
+    <p class="label pillar__sub">What you get, every month</p>
+    <ul class="plan">{plan}</ul>
+    <div class="built" data-reveal><p class="label">Built for</p><ul class="built__list">{chips}</ul></div>'''
+
+
+def pillar(p, i, tone):
+    return f'''<section class="section section--{tone} pillar{' tex' if tone != 'dark' else ' tex-dark'}" id="{p['id']}">
+  <div class="wrap">
+    <div class="pillar__head">
+      <div data-reveal>
+        <p class="label">{i + 1:02d} · {p['label']}</p>
+        <h2 class="h2 words">{words(p['title'])}</h2>
+        <p class="lead">{p['lead']}</p>
+        <div class="hero__ctas"><a class="btn btn--primary" href="{p['page']}">See the full service {ARROW}</a><a class="btn btn--ghost" href="#book">Book a call</a></div>
+      </div>
+      <div class="pillar__art" data-inview data-card>{art(p['art'])}</div>
+    </div>
+    {pillar_body(p)}
+  </div>
+</section>
+'''
+
+
 def services():
+    """Intro with three jump cards, a full section per main service, then the add-ons."""
+    jumps = ''.join(f'''<a class="jump" href="#{p['id']}" data-reveal data-card style="--d:{i * 80}ms">
+        <span class="jump__icon">{icon(SERVICE_ICONS[p['art']])}</span>
+        <small>{i + 1:02d}</small><b>{p['label']}</b><span class="jump__desc">{esc(SERVICES[i]['desc'])}</span>
+        <span class="jump__more">What is included <span aria-hidden="true">↓</span></span>
+      </a>''' for i, p in enumerate(PILLARS))
+    intro = f'''<section class="section section--dark tex-dark" id="services">
+  <div class="services__glow" aria-hidden="true"></div>
+  <div class="wrap">
+    {section_head(SERVICES_INTRO['label'], SERVICES_INTRO['title'], SERVICES_INTRO['lead'])}
+    <div class="jumps">{jumps}</div>
+  </div>
+</section>
+'''
+    tones = ['white', 'dark', 'paper']
+    pillars = ''.join(pillar(p, i, tones[i % 3]) for i, p in enumerate(PILLARS))
+    return intro + pillars + addons()
+
+
+def addons():
     cards = []
-    for i, s in enumerate(SERVICES):
+    for i, s in enumerate(SERVICES[len(PILLARS):]):
         items = ''.join(f'<li><span>{j + 1:02d}</span>{esc(x)}</li>' for j, x in enumerate(s['items']))
         cards.append(f'''  <article class="svc" data-inview data-card>
     {art(s['art'])}
-    <div class="svc__head"><h3 class="svc__title">{s['title']}</h3><span class="svc__num" aria-hidden="true">{i + 1:02d}</span></div>
+    <div class="svc__head"><h3 class="svc__title">{s['title']}</h3><span class="svc__num" aria-hidden="true">+</span></div>
     <p class="svc__desc">{s['desc']}</p>
     <ul class="svc__list">{items}</ul>
     <a class="svc__link" href="{s['page']}" aria-label="How {s['title']} works">How it works {ARROW}</a>
@@ -308,11 +373,10 @@ def services():
     <p class="svc__desc">{SERVICES_CTA['text']}</p>
     <a class="btn btn--primary" href="#book">{SERVICES_CTA['button']} {ARROW}</a>
   </article>'''
-    return f'''<section class="section section--dark tex-dark" id="services">
-  <div class="services__glow" aria-hidden="true"></div>
+    return f'''<section class="section section--dark tex-dark" id="addons">
   <div class="wrap">
-    {section_head(SERVICES_INTRO['label'], SERVICES_INTRO['title'], SERVICES_INTRO['lead'])}
-    <div class="services">
+    {section_head('Add-ons', 'When you are ready <em>to scale up.</em>', 'Two services we add once your brand is visible: a system that books meetings, and creators who spread the word.')}
+    <div class="services services--3">
 {chr(10).join(cards)}
 {cta}
     </div>
@@ -521,8 +585,23 @@ def next_services(current):
 '''
 
 
+def included(pl):
+    return f'''<section class="section section--dark tex-dark pillar" id="included">
+  <div class="wrap">
+    {section_head("What is included", pl['title'], pl['lead'])}
+    {pillar_body(pl)}
+  </div>
+</section>
+'''
+
+
 def service_page(name, p):
-    body = page_hero(p) + who(p) + steps(p) + (tools() if p.get('tools') else '') + gets(p) + numbers(p) + faq(p['faq'], f"Questions about <em>{p['title'].lower()}.</em>") + next_services(name)
+    pl = next((x for x in PILLARS if x['id'] == p.get('pillar')), None)
+    questions = faq(p['faq'], f"Questions about <em>{p['title'].lower()}.</em>")
+    if pl:  # main services: the full listing comes first, like the home page
+        body = page_hero(p) + included(pl) + who(p) + steps(p) + numbers(p) + questions + next_services(name)
+    else:
+        body = page_hero(p) + who(p) + steps(p) + (tools() if p.get('tools') else '') + gets(p) + numbers(p) + questions + next_services(name)
     return head(f"{p['title']} | {SITE['name']}", p['desc']) + nav(name) + f'<main id="main">\n{body}</main>\n' + footer()
 
 
