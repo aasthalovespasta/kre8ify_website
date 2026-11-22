@@ -83,17 +83,26 @@ def head(title, desc):
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#021526">
+<meta name="theme-color" content="#0a0a0b">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,300..400&display=swap">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap">
 <link rel="stylesheet" href="assets/css/site.css">
 <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 '''
+
+
+CAL = f'href="{SITE["calendly"]}" target="_blank" rel="noopener"'  # every meeting button opens Calendly in a new tab
+
+
+def fold_btn(label):
+    """Button that opens a folded block. Only shown on phones; on bigger screens the block is always open."""
+    return f'<button class="fold__btn" type="button" aria-expanded="false" data-fold-btn><span>{label}</span><i aria-hidden="true"></i></button>'
 
 
 SERVICE_ICONS = {'branding': 'user', 'launch': 'rocket', 'gtm': 'target', 'social': 'camera', 'creators': 'users'}
@@ -120,7 +129,7 @@ def nav(current):
     </nav>
     <div class="nav__end">
       <a class="nav__wa" href="{wa()}" aria-label="Message Krish on WhatsApp"><img src="assets/logos/whatsapp.svg" alt="" width="20" height="20"></a>
-      <a class="btn btn--primary btn--sm" href="{pre}#book">Book a call {ARROW}</a>
+      <a class="btn btn--primary btn--sm" {CAL}>Book a call {ARROW}</a>
     </div>
     <button class="nav__menu" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Open menu" data-sheet-toggle><span></span><span></span></button>
   </div>
@@ -132,7 +141,7 @@ def nav(current):
       <div class="mega__side">
         <p class="label label--light">{SERVICES_CTA['title']}</p>
         <p>{SERVICES_CTA['text']}</p>
-        <a class="btn btn--primary btn--sm" href="{pre}#book">{SERVICES_CTA['button']} {ARROW}</a>
+        <a class="btn btn--primary btn--sm" {CAL}>{SERVICES_CTA['button']} {ARROW}</a>
         <a class="mega__all" href="{pre}#services">See all services {ARROW}</a>
       </div>
     </div>
@@ -143,7 +152,7 @@ def nav(current):
     <p class="label label--light">Services</p>
     <ul class="sheet__services">{service_items('sheet__item')}</ul>
     <nav class="sheet__links" aria-label="Sections">{''.join(f'<a href="{h}">{t}</a>' for h, t, k in links)}</nav>
-    <div class="sheet__ctas"><a class="btn btn--primary" href="{pre}#book">Book a call {ARROW}</a><a class="btn btn--ghost" href="{wa()}">WhatsApp Krish</a></div>
+    <div class="sheet__ctas"><a class="btn btn--primary" {CAL}>Book a call {ARROW}</a><a class="btn btn--ghost" href="{wa()}">WhatsApp Krish</a></div>
   </div>
 </header>
 '''
@@ -159,7 +168,7 @@ def footer():
         <p class="foot__note">Founder-led growth studio, led by {SITE['founder']}. {SITE['city']}, India.</p>
       </div>
       <nav class="foot__col" aria-label="Services"><p class="label">Services</p>{services}</nav>
-      <div class="foot__col"><p class="label">Contact</p><a href="{wa()}">WhatsApp {SITE['whatsapp_label']}</a><a href="{SITE['linkedin']}">LinkedIn {SITE['linkedin_label']}</a><a href="{HOME}#book">Book a call</a></div>
+      <div class="foot__col"><p class="label">Contact</p><a href="{wa()}">WhatsApp {SITE['whatsapp_label']}</a><a href="{SITE['linkedin']}">LinkedIn {SITE['linkedin_label']}</a><a {CAL}>Book a call</a></div>
     </div>
     <p class="foot__word" aria-hidden="true" data-spot>{SITE['name']}</p>
     <p class="foot__legal">© {SITE['year']} {SITE['name']}</p>
@@ -223,20 +232,9 @@ def art(kind):
 
 
 # ---------------------------------------------------------------- home page sections
-def client_tiles(hidden=False):
-    """One tile per client: the logo when we have it, otherwise the name."""
-    attr = ' aria-hidden="true"' if hidden else ''
-    tiles = []
-    for name, logo in CLIENTS:
-        inner = f'<img src="assets/clients/{logo}" alt="{"" if hidden else esc(name)}" loading="lazy">' if logo else f'<span>{esc(name)}</span>'
-        tiles.append(f'<li class="client"{attr}>{inner}</li>')
-    return ''.join(tiles)
-
-
 def hero():
     li, cal = HERO['chips']
     feed = ''.join(f'<li><img src="assets/logos/{ic}" alt="" width="20" height="20"><span><b>{esc(t)}</b><small>{esc(s)}</small></span></li>' for ic, t, s in HERO['feed'])
-    loop = client_tiles() + client_tiles(hidden=True) + client_tiles(hidden=True)
     return f'''<section class="hero" id="top" data-hero>
   <div class="hero__bg" aria-hidden="true"><i class="orb orb--1"></i><i class="orb orb--2"></i><i class="orb orb--3"></i><span class="hero__dots"></span></div>
   <div class="wrap hero__grid">
@@ -245,7 +243,7 @@ def hero():
       <h1 class="h1 words">{words(HERO['title'])}</h1>
       <p class="hero__lead rise" style="--i:4">{HERO['lead']}</p>
       <div class="hero__ctas rise" style="--i:5">
-        <a class="btn btn--primary magnetic" href="#book">{HERO['cta']} {ARROW}</a>
+        <a class="btn btn--primary magnetic" {CAL}>{HERO['cta']} {ARROW}</a>
         <a class="btn btn--ghost" href="#services">{HERO['cta2']}</a>
       </div>
     </div>
@@ -276,10 +274,25 @@ def hero():
       <ol class="feed" data-feed data-depth="1.1" aria-hidden="true">{feed}</ol>
     </div>
   </div>
+</section>
+'''
 
-  <div class="logos rise" style="--i:6">
-    <p class="label label--light">{CLIENTS_TITLE}</p>
-    <div class="logos__track"><ul class="logos__row">{loop}</ul></div>
+
+def stars():
+    """The client logos, large, straight after the hero: the main proof on the page."""
+    tiles = ''.join(
+        f'<li class="star" data-card><div class="star__logo">'
+        + (f'<img src="assets/clients/{logo}" alt="{esc(name)}" loading="lazy">' if logo else f'<span class="star__word">{esc(name)}</span>')
+        + f'</div><p class="star__meta"><b>{esc(name)}</b><span>{esc(industry)}</span></p></li>'
+        for name, logo, industry in CLIENTS)
+    return f'''<section class="stars" id="clients">
+  <div class="stars__glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="stars__head" data-reveal>
+      <p class="label">{STARS['label']}</p>
+      <h2 class="h2 stars__title words">{words(STARS['title'])}</h2>
+    </div>
+    <ul class="stars__grid">{tiles}</ul>
   </div>
 </section>
 '''
@@ -293,7 +306,7 @@ def band(text):
 def problem():
     # where each card starts before scrolling pulls it into place: x px, y px, rotation deg
     seeds = [(-70, 90, -9), (40, 150, 6), (90, 60, 11), (-40, -120, 7), (-70, -60, -12), (80, -140, -6)]
-    cards = ''.join(f'''<article class="pcard" style="--sx:{sx};--sy:{sy};--sr:{sr}"><p class="pcard__tag">{i + 1:02d} · {esc(tag)}</p><h3>{esc(t)}</h3><p>{esc(p)}</p></article>'''
+    cards = ''.join(f'''<article class="pcard" data-tap style="--sx:{sx};--sy:{sy};--sr:{sr}"><p class="pcard__tag">{i + 1:02d} · {esc(tag)}</p><h3>{esc(t)}</h3><p>{esc(p)}</p></article>'''
                     for i, ((tag, t, p), (sx, sy, sr)) in enumerate(zip(PROBLEM['cards'], seeds)))
     return f'''<section class="section section--paper tex" id="problem">
   <div class="wrap">
@@ -309,14 +322,19 @@ def problem():
 
 def pillar_body(p):
     """What we do tiles, the monthly plan and who it is for. Used on the home page and on service pages."""
-    tiles = ''.join(f'<li class="tile" data-reveal style="--d:{i * 60}ms"><span class="tile__icon">{icon(ic)}</span><h3>{esc(t)}</h3><p>{esc(d)}</p></li>' for i, (ic, t, d) in enumerate(p['tiles']))
+    tiles = ''.join(f'<li class="tile" data-tap data-reveal style="--d:{i * 60}ms"><span class="tile__icon">{icon(ic)}</span><h3>{esc(t)}</h3><p>{esc(d)}</p></li>' for i, (ic, t, d) in enumerate(p['tiles']))
     plan = ''.join(f'<li class="plan__item{" plan__item--hi" if i == len(p["plan"]) - 1 else ""}" data-reveal style="--d:{i * 60}ms"><b>{esc(n)}</b><small>{esc(f)}</small><span>{esc(w)}</span></li>' for i, (n, f, w) in enumerate(p['plan']))
     chips = ''.join(f'<li>{esc(c)}</li>' for c in p['built'])
-    return f'''<p class="label pillar__sub">What we do</p>
+    return f'''<div class="fold" data-fold>
+    {fold_btn(f"What is included: {len(p['tiles'])} services and a monthly plan")}
+    <div class="fold__body">
+    <p class="label pillar__sub">What we do</p>
     <ul class="tiles">{tiles}</ul>
     <p class="label pillar__sub">What you get, every month</p>
     <ul class="plan">{plan}</ul>
-    <div class="built" data-reveal><p class="label">Built for</p><ul class="built__list">{chips}</ul></div>'''
+    <div class="built" data-reveal><p class="label">Built for</p><ul class="built__list">{chips}</ul></div>
+    </div>
+    </div>'''
 
 
 def pillar(p, i, tone):
@@ -327,7 +345,7 @@ def pillar(p, i, tone):
         <p class="label">{i + 1:02d} · {p['label']}</p>
         <h2 class="h2 words">{words(p['title'])}</h2>
         <p class="lead">{p['lead']}</p>
-        <div class="hero__ctas"><a class="btn btn--primary" href="{p['page']}">See the full service {ARROW}</a><a class="btn btn--ghost" href="#book">Book a call</a></div>
+        <div class="hero__ctas"><a class="btn btn--primary" href="{p['page']}">See the full service {ARROW}</a><a class="btn btn--ghost" {CAL}>Book a call</a></div>
       </div>
       <div class="pillar__art" data-inview data-card>{art(p['art'])}</div>
     </div>
@@ -361,7 +379,7 @@ def addons():
     cards = []
     for i, s in enumerate(SERVICES[len(PILLARS):]):
         items = ''.join(f'<li><span>{j + 1:02d}</span>{esc(x)}</li>' for j, x in enumerate(s['items']))
-        cards.append(f'''  <article class="svc" data-inview data-card>
+        cards.append(f'''  <article class="svc" data-tap data-inview data-card>
     {art(s['art'])}
     <div class="svc__head"><h3 class="svc__title">{s['title']}</h3><span class="svc__num" aria-hidden="true">+</span></div>
     <p class="svc__desc">{s['desc']}</p>
@@ -371,7 +389,7 @@ def addons():
     cta = f'''  <article class="svc svc--cta" data-inview>
     <h3 class="svc__title">{SERVICES_CTA['title']}</h3>
     <p class="svc__desc">{SERVICES_CTA['text']}</p>
-    <a class="btn btn--primary" href="#book">{SERVICES_CTA['button']} {ARROW}</a>
+    <a class="btn btn--primary" {CAL}>{SERVICES_CTA['button']} {ARROW}</a>
   </article>'''
     return f'''<section class="section section--dark tex-dark" id="addons">
   <div class="wrap">
@@ -397,7 +415,7 @@ def process():
 
 
 def work():
-    cards = ''.join(f'''<article class="case" data-reveal data-card style="--d:{i * 80}ms">
+    cards = ''.join(f'''<article class="case" data-tap data-reveal data-card style="--d:{i * 80}ms">
       <p class="case__tag">{esc(tag)}</p>
       <b class="case__fig">{esc(fig)}</b><p class="case__figlabel">{esc(lab)}</p>
       <h3>{esc(client)}</h3><p class="case__text">{esc(text)}</p>
@@ -406,7 +424,6 @@ def work():
   <div class="wrap">
     {section_head(WORK['label'], WORK['title'])}
     <div class="cases">{cards}</div>
-    <ul class="logo-wall" data-reveal>{client_tiles()}</ul>
   </div>
 </section>
 '''
@@ -472,7 +489,7 @@ def founder():
     </figure>
     <div>
       {section_head(FOUNDER['label'], FOUNDER['title'])}
-      <div class="letter" data-reveal>{letter}<p class="letter__sign">{FOUNDER['sign']}</p></div>
+      <div class="letter fold" data-fold data-reveal>{letter}<p class="letter__sign">{FOUNDER['sign']}</p>{fold_btn("Read Krish's full note")}</div>
     </div>
   </div>
 </section>
@@ -497,12 +514,15 @@ def book():
   <div class="wrap book">
     <div>
       {section_head(BOOK['label'], BOOK['title'], BOOK['lead'])}
+      <div class="hero__ctas book__cal" data-reveal><a class="btn btn--primary" {CAL}>Book a 30-minute call {ARROW}</a></div>
       <ul class="book__contact" data-reveal>
         <li><span>WhatsApp</span><a href="{wa()}">{SITE['whatsapp_label']}</a></li>
         <li><span>LinkedIn</span><a href="{SITE['linkedin']}">{SITE['linkedin_label']}</a></li>
       </ul>
     </div>
-    <form class="form" data-form data-wa="{SITE['whatsapp']}" novalidate data-reveal>
+    <div class="fold book__form" data-fold>
+    {fold_btn('Prefer WhatsApp? Send your details')}
+    <form class="form fold__body" data-form data-wa="{SITE['whatsapp']}" novalidate data-reveal>
       <fieldset>
         <legend>Where is your business today?</legend>
         <div class="form__choices">{choices}</div>
@@ -513,13 +533,14 @@ def book():
       <button class="btn btn--primary btn--block" type="submit">Send to Krish on WhatsApp {ARROW}</button>
       <p class="form__note">Opens WhatsApp with your answers filled in. Krish replies within a working day.</p>
     </form>
+    </div>
   </div>
 </section>
 '''
 
 
 def home():
-    body = hero() + problem() + band(BANDS[0]) + services() + process() + work() + testimonials() + founder() + faq(FAQ) + book()
+    body = hero() + stars() + problem() + band(BANDS[0]) + services() + process() + tools(home=True) + work() + testimonials() + founder() + faq(FAQ) + book()
     return (head(f"{SITE['name']}: we make founders impossible to ignore", HERO['lead'])
             + nav(HOME) + f'<main id="main">\n{body}</main>\n' + footer())
 
@@ -533,7 +554,7 @@ def page_hero(p):
       <p class="crumb rise" style="--i:0"><a href="{HOME}#services">Services</a> / {esc(p['title'])}</p>
       <h1 class="h1 words">{words(p['h1'])}</h1>
       <p class="hero__lead rise" style="--i:2">{p['lead']}</p>
-      <div class="hero__ctas rise" style="--i:3"><a class="btn btn--primary" href="{HOME}#book">Book a call with Krish {ARROW}</a><a class="btn btn--ghost" href="#how">How it works</a></div>
+      <div class="hero__ctas rise" style="--i:3"><a class="btn btn--primary" {CAL}>Book a call with Krish {ARROW}</a><a class="btn btn--ghost" href="#how">How it works</a></div>
     </div>
     <div class="phero__art rise" style="--i:2" data-inview data-card>{art(p['art'])}</div>
   </div>
@@ -542,7 +563,7 @@ def page_hero(p):
 
 
 def who(p):
-    cards = ''.join(f'<li data-reveal style="--d:{i * 80}ms"><span class="who__icon">{icon(ic)}</span><h3>{esc(t)}</h3><p>{esc(d)}</p></li>' for i, (ic, t, d) in enumerate(p['who']))
+    cards = ''.join(f'<li data-tap data-reveal style="--d:{i * 80}ms"><span class="who__icon">{icon(ic)}</span><h3>{esc(t)}</h3><p>{esc(d)}</p></li>' for i, (ic, t, d) in enumerate(p['who']))
     return f'''<section class="section section--white">
   <div class="wrap">
     {section_head('Who it is for', p['who_title'])}
@@ -563,27 +584,37 @@ def steps(p):
 '''
 
 
-def tools():
+def tools(home=False):
+    """Tool logos with filters. The GTM page also follows one lead through the system."""
     groups = [('all', 'All')] + TOOL_GROUPS
     chips = ''.join(f'<button type="button" class="filter{" is-on" if k == "all" else ""}" data-filter="{k}" aria-pressed="{str(k == "all").lower()}">{n}</button>' for k, n in groups)
     tiles = ''.join(f'<li class="tool" data-group="{g}"><img src="assets/logos/{f}" alt="" width="28" height="28" loading="lazy"><span>{esc(n)}</span></li>' for n, f, g in TOOLS)
     flow = ''.join(f'<li><span class="flow__icon"><img src="assets/logos/{f}" alt="" width="24" height="24" loading="lazy"></span><small>{esc(s)}</small><b>{esc(n)}</b><em>{esc(r)}</em></li>' for f, s, n, r in FLOW)
-    return f'''<section class="section section--white" id="tools">
-  <div class="wrap">
-    {section_head('The tools', f'{len(TOOLS)} tools, <em>set up in your name.</em>', 'We only use what your buyers need, set up on your own accounts. If we ever stop working together, everything keeps running.')}
-    <div class="filters" role="group" aria-label="Filter tools" data-reveal>{chips}</div>
-    <ul class="tools" data-tools>{tiles}</ul>
-    <div class="flow" data-flow data-reveal>
+    if home:
+        top = section_head(TOOLS_HOME['label'], TOOLS_HOME['title'], TOOLS_HOME['lead'])
+        flow_block = ''
+    else:
+        top = section_head('The tools', f'{len(TOOLS)} tools, <em>set up in your name.</em>', 'We only use what your buyers need, set up on your own accounts. If we ever stop working together, everything keeps running.')
+        flow_block = f'''<div class="flow" data-flow data-reveal>
       <p class="label label--light">Follow one lead through the system</p>
       <ol class="flow__track">{flow}</ol>
+    </div>'''
+    return f'''<section class="section section--{'paper tex' if home else 'white'}" id="tools">
+  <div class="wrap">
+    {top}
+    <div class="filters" role="group" aria-label="Filter tools" data-reveal>{chips}</div>
+    <div class="fold tools-fold" data-fold>
+      <ul class="tools" data-tools>{tiles}</ul>
+      {fold_btn(f'Show all {len(TOOLS)} tools')}
     </div>
+    {flow_block}
   </div>
 </section>
 '''
 
 
 def gets(p):
-    cards = ''.join(f'<li data-reveal style="--d:{i * 60}ms"><h3>{esc(t)}</h3><p>{esc(d)}</p></li>' for i, (t, d) in enumerate(p['gets']))
+    cards = ''.join(f'<li data-tap data-reveal style="--d:{i * 60}ms"><h3>{esc(t)}</h3><p>{esc(d)}</p></li>' for i, (t, d) in enumerate(p['gets']))
     return f'''<section class="section section--dark">
   <div class="wrap">
     {section_head('What you get', p['gets_title'])}
@@ -609,7 +640,7 @@ def next_services(current):
     return f'''<section class="section section--royal">
   <div class="wrap">
     {section_head('Next step', 'Talk it through <em>with Krish.</em>', 'A 30-minute call. We look at where your business is today and tell you honestly what would help most.')}
-    <div class="hero__ctas" data-reveal><a class="btn btn--primary" href="{HOME}#book">Book a 30-minute call {ARROW}</a><a class="btn btn--ghost" href="{wa()}">WhatsApp Krish</a></div>
+    <div class="hero__ctas" data-reveal><a class="btn btn--primary" {CAL}>Book a 30-minute call {ARROW}</a><a class="btn btn--ghost" href="{wa()}">WhatsApp Krish</a></div>
     <p class="label label--light xlinks__label">Other services</p>
     <div class="xlinks">{links}</div>
   </div>

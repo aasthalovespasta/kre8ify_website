@@ -96,6 +96,7 @@
     const group = btn.dataset.filter;
     filters.forEach((b) => { const on = b === btn; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', String(on)); });
     $$('[data-tools] .tool').forEach((t) => t.classList.toggle('is-dim', group !== 'all' && t.dataset.group !== group));
+    $$('[data-tools]').forEach((list) => list.classList.toggle('is-filtered', group !== 'all'));
   }));
 
   /* One lead through the system: steps light up in turn while visible ------- */
@@ -266,6 +267,33 @@
     // only start the timer once the section is on screen
     if (auto) new IntersectionObserver(([e], obs) => { if (e.isIntersecting) { tm.classList.add('is-auto'); obs.disconnect(); } }, { threshold: 0.4 }).observe(tm);
   }
+
+  /* Phones: shorter page ----------------------------------------------------
+     - [data-fold] blocks stay closed until their button is tapped
+     - [data-tap] cards show only their title until tapped
+     On tablets and desktops the CSS shows everything and these do nothing. */
+  const phone = matchMedia('(max-width: 760px)');
+  $$('[data-fold]').forEach((fold) => {
+    const btn = $('[data-fold-btn]', fold);
+    btn.addEventListener('click', () => {
+      const open = fold.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(open));
+      // the body was hidden, so its reveal animations never ran
+      if (open) $$('[data-reveal], [data-inview]', fold).forEach((el) => el.classList.add('is-in'));
+    });
+  });
+  const tapCards = $$('[data-tap]');
+  const setupTap = () => tapCards.forEach((card) => {
+    if (phone.matches) { card.setAttribute('aria-expanded', String(card.classList.contains('is-open'))); card.tabIndex = 0; }
+    else { card.removeAttribute('aria-expanded'); card.removeAttribute('tabindex'); }
+  });
+  tapCards.forEach((card) => {
+    const toggle = () => { const open = card.classList.toggle('is-open'); card.setAttribute('aria-expanded', String(open)); };
+    card.addEventListener('click', (e) => { if (phone.matches && !e.target.closest('a, button')) toggle(); });
+    card.addEventListener('keydown', (e) => { if (phone.matches && e.target === card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); toggle(); } });
+  });
+  setupTap();
+  phone.addEventListener('change', setupTap);
 
   /* Booking form: checks the fields, then opens WhatsApp with the answers --- */
   const form = $('[data-form]');

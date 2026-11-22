@@ -20,6 +20,7 @@ SITE = {
     'whatsapp_label': '+91 83779 16115',
     'linkedin': 'https://www.linkedin.com/in/meetkrishbhatia',
     'linkedin_label': 'in/meetkrishbhatia',
+    'calendly': 'https://calendly.com/krish-kre8ify/30min',  # every "Book a call" button opens this
     'year': 2026,
 }
 
@@ -45,18 +46,23 @@ HERO = {
     ],
 }
 
-# Brands we have worked with. Logo files live in site/assets/clients/.
+# Brands we have worked with: name, logo file, industry. Logo files live in site/assets/clients/.
 # Leave the logo as None to show the name instead (until you have the logo file).
-CLIENTS_TITLE = 'Brands we have worked with'
 CLIENTS = [
-    ('Unacademy', 'unacademy.svg'),
-    ('Skilldify', 'skilldify.png'),
-    ('Experion Developers', 'experion.webp'),
-    ('Ganga Realty', 'ganga-realty.svg'),
-    ('Sakhi & Beyond', None),
-    ('Headfield', None),
-    ('Roofs & Assets', None),
+    ('Unacademy', 'unacademy.svg', 'Education'),
+    ('Skilldify', 'skilldify.png', 'Corporate training'),
+    ('Experion Developers', 'experion.webp', 'Real estate'),
+    ('Ganga Realty', 'ganga-realty.svg', 'Real estate'),
+    ('Sakhi & Beyond', None, 'Startup'),
+    ('Headfield', None, 'Global B2B'),
+    ('Roofs & Assets', None, 'Real estate'),
 ]
+
+# The big client logo section right after the hero on the home page
+STARS = {
+    'label': 'Trusted by',
+    'title': 'The brands <em>behind our work.</em>',
+}
 
 # Big outlined words that slide sideways as you scroll, between sections
 BANDS = ['Personal branding · Startups 0 to 1 · Social media · Influencers · GTM · ']
@@ -267,7 +273,12 @@ BOOK = {
     'stages': [('Idea', 'not registered yet'), ('Registered', 'no clients yet'), ('First clients', 'need more'), ('Growing', 'need a system')],
 }
 
-# ------------------------------------------------------------------ tools (GTM engineering page)
+# ------------------------------------------------------------------ tools (home page and GTM engineering page)
+TOOLS_HOME = {
+    'label': 'Tools we use',
+    'title': 'The stack behind <em>every account.</em>',
+    'lead': 'Every tool is set up on your own accounts, so the system stays yours if we ever stop working together.',
+}
 TOOL_GROUPS = [('sig', 'Signals and data'), ('out', 'Outreach'), ('auto', 'Automation'), ('ai', 'AI'), ('crm', 'CRM and ops'), ('meet', 'Meetings'), ('brand', 'Content')]
 TOOLS = [
     ('LinkedIn Sales Navigator', 'linkedin.svg', 'sig'), ('Apollo', 'apollo.svg', 'sig'), ('Clay', 'clay.webp', 'sig'), ('PhantomBuster', 'phantombuster.svg', 'sig'),
