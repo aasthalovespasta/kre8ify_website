@@ -90,7 +90,7 @@
     steps.forEach((s) => stepIO.observe(s));
   }
 
-  /* Tools filter (GTM engineering page) ------------------------------------ */
+  /* Tools filter (home page and GTM engineering page) --------------------- */
   const filters = $$('[data-filter]');
   filters.forEach((btn) => btn.addEventListener('click', () => {
     const group = btn.dataset.filter;
@@ -99,7 +99,7 @@
     $$('[data-tools]').forEach((list) => list.classList.toggle('is-filtered', group !== 'all'));
   }));
 
-  /* One lead through the system: steps light up in turn while visible ------- */
+  /* One lead through the system (GTM page): steps light up in turn --------- */
   const flow = $('[data-flow]');
   if (flow) {
     const items = $$('.flow__track li', flow);

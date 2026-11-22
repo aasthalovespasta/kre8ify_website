@@ -1,54 +1,61 @@
-# Kre8ify website
+# Kreatify website
 
-Static, multi-page marketing site for Kre8ify, a founder-led growth studio in New Delhi. *Get known. Get clients.*
+Marketing site for Kreatify, the growth studio led by Krish Bhatia in New Delhi.
+Plain HTML, CSS and JavaScript: no framework, no libraries, nothing to install except Python 3 and Node 18+.
 
-Every page is pre-rendered to plain HTML, so Google and AI assistants can read the full copy. No framework and no npm dependencies; you only need Node 18 or newer.
+## How it fits together
 
-## Run it
+```
+scripts/content.py       every word on the site, client list, testimonials, tools, Calendly link
+scripts/build_pages.py   HTML templates; turns content.py into the pages in site/
+scripts/build-site.mjs   copies site/ to dist/ for Vercel
 
-```bash
-npm run build      # renders every page to dist/
-npm run preview    # serves dist/ at http://localhost:4173
+site/
+  index.html             home page (generated, do not edit by hand)
+  *.html                 five service pages (generated)
+  assets/css/site.css    all styles: colour tokens at the top, phone and tablet rules at the bottom
+  assets/js/site.js      menu, scroll effects, testimonials, tap-to-open cards on phones, form
+  assets/clients/        client logos
+  assets/logos/          tool logos
+  assets/people/         testimonial photos
+  assets/img/            Krish's photos and the favicon
 ```
 
-## Deploy
+## Change something
 
-Any static host works. On Vercel, Netlify or Cloudflare Pages:
+1. Edit the words in `scripts/content.py`.
+2. Rebuild the pages: `python3 scripts/build_pages.py`
+3. Open `site/index.html` in a browser and check it.
+4. Commit and push to `main`. Vercel builds and publishes it.
 
-- **Build command:** `npm run build`
-- **Output directory:** `dist`
+Common changes:
 
-Point `kre8ify.com` at it, and redirect `www` to the bare domain (or the other way round) so there's one canonical version. Then submit `https://kre8ify.com/sitemap.xml` in Google Search Console.
-
-## Pages
-
-| URL | Source |
+| What | Where |
 |---|---|
-| `/` | `src/pages/home.mjs` |
-| `/launchpad/` | `src/pages/launchpad.mjs` (0 to 1 consulting: documents, first clients, client management, invoices) |
-| `/linkedin-personal-branding/` | `src/pages/linkedin.mjs` |
-| `/instagram-content-video/` | `src/pages/instagram.mjs` |
-| `/gtm-engineering/` | `src/pages/gtm.mjs` |
-| `/ai-automation/` | `src/pages/ai.mjs` |
-| `/work/` | `src/pages/work.mjs` |
-| `/krish/` | `src/pages/krish.mjs` |
-| `/book-a-call/` | `src/pages/book.mjs` |
-| `/faq/` | `src/pages/faq.mjs` |
+| Phone, WhatsApp, LinkedIn, Calendly link | `SITE` in `content.py` |
+| Client logos in the "Trusted by" section | add the file to `site/assets/clients/`, then add it to `CLIENTS` |
+| Testimonials | `TESTIMONIALS` (photos go in `site/assets/people/`) |
+| Tools and their logos | `TOOLS` and `TOOL_GROUPS` (logos go in `site/assets/logos/`) |
+| Colours | tokens at the top of `site/assets/css/site.css` |
+| Fonts | Clash Display and Satoshi from Fontshare, linked in `head()` in `build_pages.py` |
 
-Shared pieces:
+In headings, `<em>words</em>` get the highlight: a violet gradient on black sections, a marker sweep on white sections.
 
-- `src/lib.mjs`: layout, header, footer, logo, icons, contact details, SEO tags and schema.
-- `src/content.mjs`: the 0 to 1 roadmap stages, the workflow steps and the case studies.
+## Screen sizes
 
-## Editing
+- **Desktop and tablet** show every section in full.
+- **Phones (760px and narrower)** get a shorter page: sections fold behind a button (`data-fold`), cards show their title and open on tap (`data-tap`), and the steps become a vertical workflow. These rules are in the "Phones and tablets" part at the end of `site.css` and the "Phones: shorter page" block in `site.js`.
 
-- **Contact details and legal name:** `SITE` in `src/lib.mjs`.
-- **Photos:** add `krish-laptop.jpg` and `krish-studio.jpg` to `public/assets/img/` and rebuild. They're picked up automatically.
-- **Colours and type:** tokens at the top of `public/assets/css/styles.css`. Pink and green each have their own gradients and are never mixed in one gradient.
-- **Before launch:** see `REVIEW.md` for every claim to verify and every decision made on your behalf.
+## Build and preview
 
-## Still to connect
+```bash
+python3 scripts/build_pages.py   # regenerate site/ from content.py
+npm run build                    # copy site/ to dist/
+npm run preview                  # serve dist/ at http://localhost:4173
+```
 
-- **Booking form:** it validates and shows a confirmation, but doesn't send anything yet. Connect it to Cal.com or Calendly (and your CRM) in the `form.addEventListener("submit"...)` block in `public/assets/js/main.js`, or replace step 3 with the calendar embed.
-- **Share image:** add `public/assets/img/og.png` (1200×630).
-- **Analytics:** none installed.
+Vercel settings (already in `vercel.json`): build command `npm run build`, output directory `dist`.
+
+## Old files
+
+`src/`, `public/`, `concepts/` and `REVIEW.md` belong to an earlier version of the site and are not used by the build. They can be deleted.

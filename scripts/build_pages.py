@@ -2,7 +2,15 @@
 Builds every page in site/ from scripts/content.py.
 Run:  python3 scripts/build_pages.py
 
-You normally only edit content.py. This file holds the HTML templates.
+You normally only edit content.py. This file holds the HTML templates:
+  page frame      head(), nav(), footer(), section_head()
+  illustrations   art(): the small product screens on service cards
+  home page       hero, client logos, problem, services, process, tools, work,
+                  testimonials, founder, FAQ, booking
+  service pages   page hero, who it is for, steps, tools, what you get, numbers, next step
+
+Styles live in site/assets/css/site.css and behaviour in site/assets/js/site.js.
+Data attributes in the HTML (data-reveal, data-tap, data-fold ...) are what the script hooks into.
 """
 import html, os, re, sys
 
@@ -15,8 +23,9 @@ ARROW = '<span class="arr" aria-hidden="true">→</span>'
 HOME = 'index.html'
 
 
-def wa(text=''):
-    return f"https://wa.me/{SITE['whatsapp']}" + (f"?text={text}" if text else '')
+def wa():
+    """WhatsApp chat link for Krish."""
+    return f"https://wa.me/{SITE['whatsapp']}"
 
 
 # ---------------------------------------------------------------- small icons (Lucide style, 24px)
@@ -50,6 +59,7 @@ ICONS = {
 
 
 def icon(name):
+    """Inline SVG icon by name from ICONS."""
     return f'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">{ICONS[name]}</svg>'
 
 
@@ -180,9 +190,10 @@ def footer():
 '''
 
 
-def section_head(label, title, lead='', center=False):
+def section_head(label, title, lead=''):
+    """Small label, big heading and an optional lead line at the top of a section."""
     lead_html = f'<p class="lead">{lead}</p>' if lead else ''
-    return f'''<div class="head{' head--center' if center else ''}" data-reveal>
+    return f'''<div class="head" data-reveal>
       <p class="label">{label}</p>
       <h2 class="h2 words">{words(title)}</h2>
       {lead_html}
@@ -191,6 +202,7 @@ def section_head(label, title, lead='', center=False):
 
 # ---------------------------------------------------------------- service illustrations (HTML + CSS, animate when in view)
 def art(kind):
+    """Illustration for a service: 'branding', 'launch', 'gtm', 'social' or 'creators'."""
     if kind == 'branding':
         inner = '''<div class="mini mini--post a1">
         <div class="mini__who"><img src="assets/img/krish-face.webp" alt="" width="32" height="32"><span><b>Krish Bhatia</b><small>Founder · 2d</small></span></div>
@@ -233,6 +245,7 @@ def art(kind):
 
 # ---------------------------------------------------------------- home page sections
 def hero():
+    """Home hero: headline and buttons on the left, Krish's photo with floating proof cards on the right."""
     li, cal = HERO['chips']
     feed = ''.join(f'<li><img src="assets/logos/{ic}" alt="" width="20" height="20"><span><b>{esc(t)}</b><small>{esc(s)}</small></span></li>' for ic, t, s in HERO['feed'])
     return f'''<section class="hero" id="top" data-hero>
@@ -304,6 +317,7 @@ def band(text):
 
 
 def problem():
+    """Six problem cards that fly into place as you scroll (on phones: tap a card to read it)."""
     # where each card starts before scrolling pulls it into place: x px, y px, rotation deg
     seeds = [(-70, 90, -9), (40, 150, 6), (90, 60, 11), (-40, -120, 7), (-70, -60, -12), (80, -140, -6)]
     cards = ''.join(f'''<article class="pcard" data-tap style="--sx:{sx};--sy:{sy};--sr:{sr}"><p class="pcard__tag">{i + 1:02d} · {esc(tag)}</p><h3>{esc(t)}</h3><p>{esc(p)}</p></article>'''
@@ -338,6 +352,7 @@ def pillar_body(p):
 
 
 def pillar(p, i, tone):
+    """One full section for a main service. tone is 'white', 'dark' or 'paper'."""
     return f'''<section class="section section--{tone} pillar{' tex' if tone != 'dark' else ' tex-dark'}" id="{p['id']}">
   <div class="wrap">
     <div class="pillar__head">
@@ -376,6 +391,7 @@ def services():
 
 
 def addons():
+    """The add-on services (GTM engineering, influencer marketing) plus a 'not sure' card."""
     cards = []
     for i, s in enumerate(SERVICES[len(PILLARS):]):
         items = ''.join(f'<li><span>{j + 1:02d}</span>{esc(x)}</li>' for j, x in enumerate(s['items']))
@@ -404,6 +420,7 @@ def addons():
 
 
 def process():
+    """How we work, in four steps (a vertical workflow on phones)."""
     steps = ''.join(f'<li style="--d:{i * 90}ms"><span class="process__n">{i + 1}</span><h3>{esc(t)}</h3><p>{esc(p)}</p></li>' for i, (t, p) in enumerate(PROCESS['steps']))
     return f'''<section class="section section--white" id="process">
   <div class="wrap">
@@ -415,6 +432,7 @@ def process():
 
 
 def work():
+    """Results: one card per client with the headline number."""
     cards = ''.join(f'''<article class="case" data-tap data-reveal data-card style="--d:{i * 80}ms">
       <p class="case__tag">{esc(tag)}</p>
       <b class="case__fig">{esc(fig)}</b><p class="case__figlabel">{esc(lab)}</p>
@@ -430,6 +448,7 @@ def work():
 
 
 def testimonials():
+    """One big quote with client tabs underneath; it moves on by itself."""
     if not TESTIMONIALS['items']:
         return ''
     def person(t):
@@ -479,6 +498,7 @@ def testimonials():
 
 
 def founder():
+    """Krish's photo, numbers and a short note."""
     letter = ''.join(f'<p>{esc(p)}</p>' for p in FOUNDER['letter'])
     stats = ''.join(f'<div><dt>{esc(a)}</dt><dd>{esc(b)}</dd></div>' for a, b in FOUNDER['stats'])
     return f'''<section class="section section--white" id="founder">
@@ -497,6 +517,7 @@ def founder():
 
 
 def faq(items, title='Questions <em>founders ask.</em>', tone='paper'):
+    """Questions that open and close. items is a list of (question, answer)."""
     rows = ''.join(f'<details{" open" if i == 0 else ""}><summary>{esc(q)}<span class="plus" aria-hidden="true"></span></summary><p>{esc(a)}</p></details>' for i, (q, a) in enumerate(items))
     return f'''<section class="section section--{tone}" id="faq">
   <div class="wrap faq">
@@ -508,6 +529,7 @@ def faq(items, title='Questions <em>founders ask.</em>', tone='paper'):
 
 
 def book():
+    """Next step: Calendly button, contact links and a form that opens WhatsApp."""
     choices = ''.join(f'<label><input type="radio" name="stage" value="{esc(a)}, {esc(b)}"{" checked" if i == 0 else ""}><span><b>{esc(a)}</b><small>{esc(b)}</small></span></label>' for i, (a, b) in enumerate(BOOK['stages']))
     options = ''.join(f'<option>{esc(s["title"])}</option>' for s in SERVICES)
     return f'''<section class="section section--royal" id="book">
@@ -540,6 +562,7 @@ def book():
 
 
 def home():
+    """The home page, section by section, top to bottom."""
     body = hero() + stars() + problem() + band(BANDS[0]) + services() + process() + tools(home=True) + work() + testimonials() + founder() + faq(FAQ) + book()
     return (head(f"{SITE['name']}: we make founders impossible to ignore", HERO['lead'])
             + nav(HOME) + f'<main id="main">\n{body}</main>\n' + footer())
@@ -659,6 +682,7 @@ def included(pl):
 
 
 def service_page(name, p):
+    """A service page. Main services repeat their full listing from the home page."""
     pl = next((x for x in PILLARS if x['id'] == p.get('pillar')), None)
     questions = faq(p['faq'], f"Questions about <em>{p['title'].lower()}.</em>")
     if pl:  # main services: the full listing comes first, like the home page

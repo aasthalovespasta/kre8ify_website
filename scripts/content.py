@@ -5,9 +5,13 @@ How to change the site:
   1. Edit the text below (keep the quotes and commas).
   2. Run:  python3 scripts/build_pages.py
   3. Open site/index.html in a browser to check.
+  4. Commit and push to main. Vercel publishes it.
 
 Tips
-  - <em>word</em> inside a heading shows that word in the serif italic style.
+  - <em>word</em> inside a heading highlights it: a violet gradient on black sections,
+    a marker sweep on white sections.
+  - Contact details and the Calendly link are in SITE, just below.
+  - Client logos: put the file in site/assets/clients/ and add its name in CLIENTS.
   - Lists are written as [ "one", "two" ]. Add or remove lines freely.
   - Avoid long dashes. Use commas or "to" instead (e.g. "weeks 3 to 8").
 """
