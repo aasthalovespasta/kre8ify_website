@@ -1,4 +1,4 @@
-/* Kreatify site script. Plain JavaScript, no libraries.
+/* Kre8ify site script. Plain JavaScript, no libraries.
    Each block checks that its markup exists, so the same file works on every page. */
 (() => {
   const $ = (sel, root = document) => root.querySelector(sel);

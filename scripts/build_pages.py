@@ -94,7 +94,11 @@ def head(title, desc):
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0a0a0b">
+<!-- tab icon: SVG for modern browsers, PNG and favicon.ico for the rest, so the host's default icon never shows -->
+<link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap">

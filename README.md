@@ -1,6 +1,6 @@
-# Kreatify website
+# Kre8ify website
 
-Marketing site for Kreatify, the growth studio led by Krish Bhatia in New Delhi.
+Marketing site for Kre8ify, the growth studio led by Krish Bhatia in New Delhi.
 Plain HTML, CSS and JavaScript: no framework, no libraries, nothing to install except Python 3 and Node 18+.
 
 ## How it fits together

@@ -17,7 +17,7 @@ Tips
 """
 
 SITE = {
-    'name': 'Kreatify',
+    'name': 'Kre8ify',
     'founder': 'Krish Bhatia',
     'city': 'New Delhi',
     'whatsapp': '918377916115',
@@ -35,7 +35,7 @@ HERO = {
     'lead': 'We build personal brands on LinkedIn, take startups from 0 to 1, and run Instagram and social media that turns attention into customers.',
     'cta': 'Book a call with Krish',
     'cta2': 'See our services',
-    'photo_alt': 'Krish Bhatia, founder of Kreatify',
+    'photo_alt': 'Krish Bhatia, founder of Kre8ify',
     'chips': [  # small cards that float around the photo
         {'icon': 'linkedin.svg', 'label': "Krish's LinkedIn", 'value': '0 to 28K+'},
         {'icon': 'gcal.svg', 'label': 'Meeting booked', 'value': 'Thu, 4:30 pm'},
@@ -239,7 +239,7 @@ TESTIMONIALS = {
             'photo': 'shivangi-narula.webp',
         },
         {
-            'quote': "I came in with Sakhi & Beyond as an idea and a LinkedIn profile I hardly used. Kreatify is helping me with both at the same time: getting the brand ready to launch, and making sure people know who is behind it. Krish is very hands-on, and honest about what will work and what will not.",
+            'quote': "I came in with Sakhi & Beyond as an idea and a LinkedIn profile I hardly used. Kre8ify is helping me with both at the same time: getting the brand ready to launch, and making sure people know who is behind it. Krish is very hands-on, and honest about what will work and what will not.",
             'name': 'Ria Bhide', 'role': 'Founder, Sakhi & Beyond',
             'tag': 'Personal branding and startup 0 to 1',
             'linkedin': 'https://www.linkedin.com/in/ria-bhide/',
@@ -254,7 +254,7 @@ FOUNDER = {
     'letter': [
         'I started at zero followers, where most people I meet are today. I grew past 28,000 without spending a rupee on ads, ran more than 50 workshops on growth, and kept closing deals myself.',
         'Again and again I saw the same thing, with professionals and with new startups. It is rarely a lack of effort. The brand, the posts, the social media and the follow-up all sit with different people, and nobody connects them.',
-        'Kreatify is the team I wish I had at the start. I lead the strategy on every account, I check the work before it goes live, and you can reach me on WhatsApp.',
+        'Kre8ify is the team I wish I had at the start. I lead the strategy on every account, I check the work before it goes live, and you can reach me on WhatsApp.',
     ],
     'sign': 'Krish',
     'stats': [('LinkedIn followers', '28K+'), ('Workshops run', '50+'), ('Trainfluence', '2025 speaker')],
