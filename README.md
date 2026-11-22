@@ -55,7 +55,3 @@ npm run preview                  # serve dist/ at http://localhost:4173
 ```
 
 Vercel settings (already in `vercel.json`): build command `npm run build`, output directory `dist`.
-
-## Old files
-
-`src/`, `public/`, `concepts/` and `REVIEW.md` belong to an earlier version of the site and are not used by the build. They can be deleted.

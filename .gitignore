@@ -1,6 +1,4 @@
 dist/
 node_modules/
 .DS_Store
-concepts/.taste-skill/
-concepts/shots/
 __pycache__/
