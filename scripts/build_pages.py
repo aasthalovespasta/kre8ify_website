@@ -568,7 +568,7 @@ def book():
 def home():
     """The home page, section by section, top to bottom."""
     body = hero() + stars() + problem() + band(BANDS[0]) + services() + process() + tools(home=True) + work() + testimonials() + founder() + faq(FAQ) + book()
-    return (head(f"{SITE['name']}: we make founders impossible to ignore", HERO['lead'])
+    return (head(f"{SITE['name']}: we make founders and startups impossible to ignore", HERO['lead'])
             + nav(HOME) + f'<main id="main">\n{body}</main>\n' + footer())
 
 

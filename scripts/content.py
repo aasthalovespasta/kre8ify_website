@@ -31,7 +31,7 @@ SITE = {
 # ------------------------------------------------------------------ home page
 HERO = {
     'eyebrow': 'Personal branding · Startups · Social media',
-    'title': 'We make people and startups <em>impossible to ignore.</em>',
+    'title': 'We make founders and startups <em>impossible to ignore.</em>',
     'lead': 'We build personal brands on LinkedIn, take startups from 0 to 1, and run Instagram and social media that turns attention into customers.',
     'cta': 'Book a call with Krish',
     'cta2': 'See our services',
